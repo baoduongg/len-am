@@ -79,7 +79,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="font-serif text-lg font-bold tracking-tight mb-1 text-ink group-hover:text-accent transition-colors duration-300">
+        <h3 className="font-serif text-lg font-bold leading-snug mb-1.5 text-ink group-hover:text-accent transition-colors duration-300">
           {product.name}
         </h3>
 

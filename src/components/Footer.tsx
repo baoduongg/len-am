@@ -15,7 +15,7 @@ export default function Footer() {
           
           {/* Logo & Description column */}
           <div className="col-span-1 md:col-span-6 space-y-6">
-            <span className="text-2xl font-serif font-bold text-accent tracking-tight block">
+            <span className="text-2xl font-serif font-bold text-accent block">
               Len Ấm
             </span>
             <p className="text-xs text-ink-muted max-w-sm leading-relaxed font-normal">

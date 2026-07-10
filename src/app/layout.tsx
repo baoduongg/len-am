@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
-import { Fraunces, Karla } from "next/font/google";
+import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
+import LoadingScreen from "@/components/LoadingScreen";
 import "./globals.css";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
-  subsets: ["latin"],
+  subsets: ["vietnamese", "latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
   style: ["normal", "italic"],
 });
 
-const karla = Karla({
-  variable: "--font-karla",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans",
+  subsets: ["vietnamese", "latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -28,11 +29,12 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${fraunces.variable} ${karla.variable} antialiased`}
+      className={`${fraunces.variable} ${plusJakartaSans.variable} antialiased`}
     >
       <body className="min-h-screen flex flex-col bg-background text-foreground antialiased font-sans">
         {/* Fixed Noise Overlay for Organic Editorial Texture */}
         <div className="noise-overlay" aria-hidden="true" />
+        <LoadingScreen />
         {children}
       </body>
     </html>

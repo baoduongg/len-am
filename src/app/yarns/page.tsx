@@ -303,7 +303,7 @@ export default function YarnsPage() {
         {/* Header Block */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-6 border-b border-border-custom/50">
           <div>
-            <h1 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-ink mb-2">
+            <h1 className="font-serif text-3xl md:text-4xl font-bold leading-[1.2] text-ink mb-2">
               Sợi len tuyển chọn
             </h1>
             <p className="text-xs text-ink-muted font-normal max-w-xl">

@@ -29,6 +29,13 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface WorkshopRegistration {
+  name: string;
+  phone: string;
+  session: string;
+  registeredAt: string;
+}
+
 interface FilterState {
   fibers: string[];
   weights: string[];
@@ -42,6 +49,7 @@ interface StoreState {
   products: Product[];
   cart: CartItem[];
   filters: FilterState;
+  workshopRegistrations: WorkshopRegistration[];
   
   // Cart Actions
   addToCart: (product: Product, color: YarnColor) => void;
@@ -57,6 +65,11 @@ interface StoreState {
   setSearchQuery: (query: string) => void;
   setSortBy: (sort: string) => void;
   resetFilters: () => void;
+
+  // Workshop Actions
+  registerWorkshop: (registration: Omit<WorkshopRegistration, "registeredAt">) => void;
+  cancelWorkshop: (index: number) => void;
+  loadWorkshopRegistrations: () => void;
 }
 
 const INITIAL_PRODUCTS: Product[] = [
@@ -193,6 +206,7 @@ export const useStore = create<StoreState>((set) => ({
   products: INITIAL_PRODUCTS,
   cart: [],
   filters: INITIAL_FILTERS,
+  workshopRegistrations: [],
   
   // Cart Logic
   addToCart: (product, color) => set((state) => {
@@ -261,5 +275,40 @@ export const useStore = create<StoreState>((set) => ({
     filters: { ...state.filters, sortBy: sort }
   })),
   
-  resetFilters: () => set({ filters: INITIAL_FILTERS })
+  resetFilters: () => set({ filters: INITIAL_FILTERS }),
+
+  // Workshop Logic
+  registerWorkshop: (registration) => set((state) => {
+    const newReg: WorkshopRegistration = {
+      ...registration,
+      registeredAt: new Date().toISOString()
+    };
+    const updated = [...state.workshopRegistrations, newReg];
+    if (typeof window !== "undefined") {
+      localStorage.setItem("workshop_registrations", JSON.stringify(updated));
+    }
+    return { workshopRegistrations: updated };
+  }),
+  
+  cancelWorkshop: (index) => set((state) => {
+    const updated = state.workshopRegistrations.filter((_, i) => i !== index);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("workshop_registrations", JSON.stringify(updated));
+    }
+    return { workshopRegistrations: updated };
+  }),
+  
+  loadWorkshopRegistrations: () => set(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("workshop_registrations");
+      if (saved) {
+        try {
+          return { workshopRegistrations: JSON.parse(saved) };
+        } catch (e) {
+          console.error("Failed to parse workshop registrations", e);
+        }
+      }
+    }
+    return {};
+  })
 }));

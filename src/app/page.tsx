@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
@@ -7,10 +8,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { useStore } from "@/store/useStore";
+import WorkshopModal from "@/components/WorkshopModal";
 
 export default function Home() {
   const products = useStore((state) => state.products);
   const featuredProducts = products.filter((p) => p.featured);
+  const [isWorkshopOpen, setIsWorkshopOpen] = useState(false);
 
   // Stagger entry configurations
   const fadeUpVariants = {
@@ -57,9 +60,9 @@ export default function Home() {
                   Sợi len tự nhiên cao cấp
                 </span>
                 
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-ink tracking-tight leading-[1.05] font-serif">
+                <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-ink leading-[1.15]">
                   Dệt nên ấm áp <br />
-                  <span className="italic font-medium text-accent font-serif font-light">từ đôi bàn tay</span>
+                  <span className="italic font-light text-accent">từ đôi bàn tay</span>
                 </h1>
                 
                 <p className="text-ink-muted text-sm md:text-base max-w-[45ch] font-normal leading-relaxed">
@@ -143,7 +146,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-6 md:px-8">
             <div className="text-center max-w-2xl mx-auto mb-20 space-y-3">
               <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-accent block">Giá trị cốt lõi</span>
-              <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink tracking-tight leading-tight">
+              <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink leading-[1.2]">
                 Mỗi cuộn len là một câu chuyện
               </h2>
               <p className="text-xs text-ink-muted leading-relaxed font-normal">
@@ -212,7 +215,7 @@ export default function Home() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
               <div className="space-y-3">
                 <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-accent block">Chất liệu tuyển chọn</span>
-                <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink tracking-tight">Bộ sưu tập sợi tự nhiên</h2>
+                <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink leading-[1.2]">Bộ sưu tập sợi tự nhiên</h2>
               </div>
               <Link 
                 href="/yarns" 
@@ -319,7 +322,7 @@ export default function Home() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
               <div className="space-y-3">
                 <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-accent block">Được yêu thích nhất</span>
-                <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink tracking-tight">Cuộn len bán chạy nhất</h2>
+                <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink leading-[1.2]">Cuộn len bán chạy nhất</h2>
               </div>
               <Link 
                 href="/yarns" 
@@ -347,7 +350,7 @@ export default function Home() {
               <div className="double-bezel-inner p-10 md:p-16 text-center space-y-6 flex flex-col items-center">
                 <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-accent block">Cộng đồng đan len</span>
                 
-                <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink tracking-tight max-w-xl">
+                <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink leading-[1.2] max-w-xl">
                   Nhận những câu chuyện ấm áp qua hộp thư
                 </h2>
                 
@@ -397,7 +400,7 @@ export default function Home() {
               </div>
               <div className="space-y-6">
                 <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-accent block">Trải nghiệm thủ công</span>
-                <h2 className="font-serif text-3xl md:text-4xl font-bold text-ink tracking-tight">
+                <h2 className="font-serif text-3xl md:text-4xl font-bold text-ink leading-[1.2]">
                   Lớp học Đan len cuối tuần
                 </h2>
                 <p className="text-xs text-ink-muted leading-relaxed">
@@ -405,7 +408,7 @@ export default function Home() {
                 </p>
                 <div className="pt-2">
                   <button 
-                    onClick={() => alert("Chức năng đặt chỗ workshop sẽ được cập nhật sớm.")}
+                    onClick={() => setIsWorkshopOpen(true)}
                     className="pl-6 pr-2.5 py-2.5 rounded-btn bg-accent-sage text-[#FFFCF7] flex items-center gap-4 font-semibold text-xs shadow-warm-sm hover:opacity-90 group transition-all duration-300"
                   >
                     <span>Đặt chỗ ngay</span>
@@ -423,6 +426,7 @@ export default function Home() {
       </main>
 
       <Footer />
+      <WorkshopModal isOpen={isWorkshopOpen} onClose={() => setIsWorkshopOpen(false)} />
     </div>
   );
 }

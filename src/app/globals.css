@@ -24,7 +24,7 @@
   --color-hover-fill: var(--hover-fill);
 
   --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
-  --font-sans: var(--font-karla), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
 
   --radius-card: 24px;
   --radius-inner: 16px;
