@@ -1,0 +1,160 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import { motion } from "motion/react";
+import { Product, YarnColor, useStore } from "@/store/useStore";
+
+interface ProductCardProps {
+  product: Product;
+}
+
+export default function ProductCard({ product }: ProductCardProps) {
+  const [activeColor, setActiveColor] = useState<YarnColor>(product.colors[0]);
+  const addToCart = useStore((state) => state.addToCart);
+
+  // Spring animations configuration
+  const cardSpring = {
+    type: "spring" as const,
+    stiffness: 300,
+    damping: 20
+  };
+
+  const imageSpring = {
+    type: "spring" as const,
+    stiffness: 200,
+    damping: 25
+  };
+
+  const swatchSpring = {
+    type: "spring" as const,
+    stiffness: 400,
+    damping: 15
+  };
+
+  return (
+    <motion.div
+      className="double-bezel-outer h-full text-ink hover:shadow-warm-lg shadow-warm-md group"
+      whileHover={{ y: -8 }}
+      transition={cardSpring}
+    >
+      <div className="double-bezel-inner flex flex-col p-4">
+        {/* Product Image Container */}
+        <div className="relative w-full aspect-[4/5] rounded-inner overflow-hidden bg-background mb-4">
+          <motion.div
+            className="w-full h-full relative"
+            whileHover={{ scale: 1.05 }}
+            transition={imageSpring}
+          >
+            <Image
+              src={activeColor.image}
+              alt={`${product.name} - ${activeColor.name}`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
+          </motion.div>
+          
+          {/* Badge (if featured) */}
+          {product.featured && (
+            <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] uppercase tracking-[0.15em] font-semibold bg-accent text-[#FFFCF7] shadow-sm">
+              Tuyển chọn
+            </span>
+          )}
+
+          {/* Stock warning */}
+          {product.stock <= 8 && (
+            <span className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-accent-sage text-[#FFFCF7] shadow-sm">
+              Chỉ còn {product.stock} cuộn
+            </span>
+          )}
+        </div>
+
+        {/* Product Specs / Metadata */}
+        <div className="flex items-center justify-between text-xs text-ink-muted mb-1.5 font-medium">
+          <span className="tracking-wide">{product.fiberDetail.split(',')[0]}</span>
+          <span className="px-2 py-0.5 bg-hover-fill text-ink rounded-full text-[10px]">
+            {product.weight}
+          </span>
+        </div>
+
+        {/* Title */}
+        <h3 className="font-serif text-lg font-bold tracking-tight mb-1 text-ink group-hover:text-accent transition-colors duration-300">
+          {product.name}
+        </h3>
+
+        {/* Description (shortened) */}
+        <p className="text-xs text-ink-muted font-normal leading-relaxed mb-4 line-clamp-2">
+          {product.description}
+        </p>
+
+        {/* Color Swatch Selection */}
+        <div className="mt-auto flex items-center justify-between gap-4 pt-3 border-t border-border-custom/50">
+          <div className="flex items-center gap-1.5">
+            {product.colors.map((color) => {
+              const isSelected = activeColor.hex === color.hex;
+              return (
+                <motion.button
+                  key={color.hex}
+                  onClick={() => setActiveColor(color)}
+                  className={`relative w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 focus:outline-none`}
+                  style={{ backgroundColor: color.hex }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  animate={{
+                    scale: isSelected ? 1.15 : 1,
+                    boxShadow: isSelected
+                      ? `0 0 0 2px var(--background), 0 0 0 3.5px var(--accent-terracotta)`
+                      : `0 0 0 0px transparent`
+                  }}
+                  transition={swatchSpring}
+                  aria-label={`Select ${color.name} color`}
+                >
+                  <span className="sr-only">{color.name}</span>
+                </motion.button>
+              );
+            })}
+          </div>
+          
+          <div className="text-right">
+            <div className="text-xs text-ink-muted font-medium tracking-wide">
+              {product.yardage.split('/')[0]}
+            </div>
+          </div>
+        </div>
+
+        {/* Price & Add to Cart Action */}
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-border-custom/50">
+          <div>
+            <span className="text-[11px] uppercase tracking-wider text-ink-muted block font-medium">Giá bán</span>
+            <span className="font-serif text-base font-bold text-ink">
+              {product.price.toLocaleString("vi-VN")}đ
+            </span>
+          </div>
+
+          {/* Button-in-Button CTA Architecture */}
+          <motion.button
+            onClick={() => addToCart(product, activeColor)}
+            className="pl-4 pr-1.5 py-1.5 rounded-btn bg-accent text-[#FFFCF7] flex items-center gap-3 font-medium text-xs shadow-warm-sm hover:bg-[#A96340] group focus:outline-none"
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 400, damping: 12 }}
+          >
+            <span>Thêm vào giỏ</span>
+            {/* Trailing Icon Enclosure */}
+            <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-105">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                className="w-3.5 h-3.5 text-[#FFFCF7]"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </div>
+          </motion.button>
+        </div>
+      </div>
+    </motion.div>
+  );
+}

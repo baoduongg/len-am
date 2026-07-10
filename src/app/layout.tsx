@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
+import { Fraunces, Karla } from "next/font/google";
 import "./globals.css";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   style: ["normal", "italic"],
 });
 
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
-  subsets: ["latin", "vietnamese"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+const karla = Karla({
+  variable: "--font-karla",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Len Ấm - Thủ công từ đôi bàn tay ấm",
-  description: "Nơi chia sẻ và lưu giữ những câu chuyện ấm áp qua từng sợi len. Cửa hàng len thủ công và workshop đan len ấm áp tại TP. Hồ Chí Minh.",
+  title: "Len Ấm - Premium Yarns & Sewing Supplies",
+  description: "Nơi chia sẻ và lưu giữ những câu chuyện ấm áp qua từng sợi len. Cửa hàng len thủ công tuyển chọn và workshop đan len ấm áp.",
 };
 
 export default function RootLayout({
@@ -28,12 +28,13 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${playfair.variable} ${jakarta.variable} antialiased`}
+      className={`${fraunces.variable} ${karla.variable} antialiased`}
     >
-      <body className="min-h-screen flex flex-col bg-background text-foreground antialiased">
+      <body className="min-h-screen flex flex-col bg-background text-foreground antialiased font-sans">
+        {/* Fixed Noise Overlay for Organic Editorial Texture */}
+        <div className="noise-overlay" aria-hidden="true" />
         {children}
       </body>
     </html>
   );
 }
-
