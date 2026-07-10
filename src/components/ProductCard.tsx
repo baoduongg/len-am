@@ -90,7 +90,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Color Swatch Selection */}
         <div className="mt-auto flex items-center justify-between gap-4 pt-3 border-t border-border-custom/50">
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             {product.colors.map((color) => {
               const isSelected = activeColor.hex === color.hex;
               return (
