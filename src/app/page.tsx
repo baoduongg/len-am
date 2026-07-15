@@ -161,13 +161,13 @@ export default function Home() {
               </p>
 
               {/* Primary & Secondary Action CTAs */}
-              <div className="flex flex-wrap gap-4 pt-4 w-full sm:w-auto">
+              <div className="flex flex-wrap items-center gap-4 pt-4 w-full sm:w-auto">
                 <CtaButton href="/yarns">Khám phá sợi len</CtaButton>
 
                 <Link
                   href="/#workshop"
                   onClick={(e) => handleHashClick(e, "workshop")}
-                  className="px-6 py-3.5 rounded-btn border border-border-custom hover:bg-hover-fill text-ink font-semibold text-xs active:scale-[0.98] transition-all duration-300"
+                  className="h-12 px-6 rounded-btn border border-border-custom hover:bg-hover-fill text-ink font-semibold text-xs active:scale-[0.98] transition-all duration-300 flex items-center justify-center"
                 >
                   Lịch học Workshop
                 </Link>

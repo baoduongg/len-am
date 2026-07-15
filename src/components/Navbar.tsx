@@ -9,7 +9,7 @@ import { formatPrice } from "@/utils/format";
 import ConfirmModal from "@/components/ConfirmModal";
 import Drawer from "@/components/ui/Drawer";
 import EmptyState from "@/components/ui/EmptyState";
-import { handleHashClick } from "@/utils/navigation";
+import { handleHashClick, handleLogoClick } from "@/utils/navigation";
 import { NAV_LINKS } from "@/lib/constants";
 
 function CartIcon({ className, strokeWidth = 1.5 }: { className: string; strokeWidth?: number }) {
@@ -57,7 +57,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2 group">
+            <Link href="/" onClick={handleLogoClick} className="flex items-center space-x-2 group">
               <span className="text-2xl font-serif font-bold text-accent transition-transform duration-300 group-hover:scale-102">
                 Len Ấm
               </span>

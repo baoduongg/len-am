@@ -46,7 +46,7 @@ export default function CtaButton({
   className = "",
   children,
 }: CtaButtonProps) {
-  const classes = `pl-6 pr-2.5 py-2.5 rounded-btn text-surface flex items-center gap-4 font-semibold text-xs active:scale-[0.98] group transition-all duration-300 ${
+  const classes = `pl-6 pr-2.5 h-12 rounded-btn text-surface flex items-center gap-4 font-semibold text-xs active:scale-[0.98] group transition-all duration-300 ${
     color === "accent"
       ? "bg-accent shadow-warm-md hover:bg-accent-dark"
       : "bg-accent-sage shadow-warm-sm hover:opacity-90"

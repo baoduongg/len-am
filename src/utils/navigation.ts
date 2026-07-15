@@ -35,3 +35,19 @@ export function handleHashClick(
     }
   }
 }
+
+/**
+ * Xử lý sự kiện click vào Logo để cuộn về đầu trang chủ.
+ */
+export function handleLogoClick(e: React.MouseEvent<HTMLAnchorElement>) {
+  if (typeof window === "undefined") return;
+
+  if (window.location.pathname === "/") {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    window.history.pushState(null, "", "/");
+  }
+}
