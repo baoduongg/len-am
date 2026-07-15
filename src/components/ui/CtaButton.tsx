@@ -7,7 +7,6 @@ const ICONS = {
   plus: "M12 4.5v15m7.5-7.5h-15",
 } as const;
 
-/** Vòng tròn icon nằm trong nút CTA — dùng lại được trong các nút tự dựng (ProductCard, WorkshopModal). */
 export function IconCircle({
   icon = "arrow",
   className = "w-8 h-8",
@@ -37,7 +36,6 @@ interface CtaButtonProps {
   children: React.ReactNode;
 }
 
-/** Nút CTA "pill" đặc trưng của dự án: chữ + vòng tròn icon. Render <Link> khi có href, ngược lại <button>. */
 export default function CtaButton({
   href,
   onClick,

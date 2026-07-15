@@ -6,11 +6,11 @@ import CtaButton from "@/components/ui/CtaButton";
 export default function NotFound() {
   return (
     <main className="flex-grow min-h-[70dvh] flex flex-col items-center justify-center relative overflow-hidden select-none px-6 py-32 text-center">
-      {/* Decorative Ambient Circle */}
+      
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] bg-accent/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="space-y-7 max-w-md relative z-10 flex flex-col items-center">
-        {/* Animated Custom Yarn / Warn Alert Icon */}
+        
         <motion.div
           initial={{ scale: 0.85, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}

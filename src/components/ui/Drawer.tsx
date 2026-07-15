@@ -10,7 +10,6 @@ interface DrawerProps {
   children: React.ReactNode;
 }
 
-/** Panel trượt từ phải kèm backdrop — dùng cho giỏ hàng và bộ lọc mobile. */
 export default function Drawer({
   isOpen,
   onClose,
@@ -22,7 +21,7 @@ export default function Drawer({
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
+          
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.4 }}
@@ -30,7 +29,7 @@ export default function Drawer({
             onClick={onClose}
             className="fixed inset-0 z-50 bg-ink"
           />
-          {/* Panel */}
+          
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}

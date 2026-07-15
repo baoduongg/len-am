@@ -25,7 +25,7 @@ export default function ConfirmModal({
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop blur overlay */}
+          
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
@@ -34,7 +34,7 @@ export default function ConfirmModal({
             className="fixed inset-0 bg-ink backdrop-blur-sm"
           />
 
-          {/* Double-Bezel Modal Container */}
+          
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}

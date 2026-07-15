@@ -16,7 +16,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const addToCart = useStore((state) => state.addToCart);
   const addToast = useStore((state) => state.addToast);
 
-  // Spring animations configuration
+  
   const cardSpring = {
     type: "spring" as const,
     stiffness: 300,
@@ -42,7 +42,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       transition={cardSpring}
     >
       <div className="double-bezel-inner flex flex-col p-4">
-        {/* Product Image Container */}
+        
         <div className="relative w-full aspect-[4/5] rounded-inner overflow-hidden bg-background mb-4">
           <motion.div
             className="w-full h-full relative"
@@ -58,14 +58,14 @@ export default function ProductCard({ product }: ProductCardProps) {
             />
           </motion.div>
           
-          {/* Badge (if featured) */}
+          
           {product.featured && (
             <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] uppercase tracking-[0.15em] font-semibold bg-accent text-surface shadow-sm">
               Tuyển chọn
             </span>
           )}
 
-          {/* Stock warning */}
+          
           {product.stock <= 8 && (
             <span className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-accent-sage text-surface shadow-sm">
               Chỉ còn {product.stock} cuộn
@@ -73,7 +73,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
 
-        {/* Product Specs / Metadata */}
+        
         <div className="flex items-center justify-between text-xs text-ink-muted mb-1.5 font-medium">
           <span className="tracking-wide">{product.fiberDetail.split(',')[0]}</span>
           <span className="px-2 py-0.5 bg-hover-fill text-ink rounded-full text-[10px]">
@@ -81,17 +81,17 @@ export default function ProductCard({ product }: ProductCardProps) {
           </span>
         </div>
 
-        {/* Title */}
+        
         <h3 className="font-serif text-lg font-bold leading-snug mb-1.5 text-ink group-hover:text-accent transition-colors duration-300">
           {product.name}
         </h3>
 
-        {/* Description (shortened) */}
+        
         <p className="text-xs text-ink-muted font-normal leading-relaxed mb-4 line-clamp-2">
           {product.description}
         </p>
 
-        {/* Color Swatch Selection */}
+        
         <div className="mt-auto flex items-center justify-between gap-4 pt-3 border-t border-border-custom/50">
           <div className="flex items-center gap-2">
             {product.colors.map((color) => {
@@ -126,7 +126,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
 
-        {/* Price & Add to Cart Action */}
+        
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-border-custom/50">
           <div>
             <span className="text-[11px] uppercase tracking-wider text-ink-muted block font-medium">Giá bán</span>
@@ -135,7 +135,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
 
-          {/* Button-in-Button CTA Architecture */}
+          
           <motion.button
             onClick={() => {
               addToCart(product, activeColor);

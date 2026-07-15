@@ -7,15 +7,15 @@ import { NAV_LINKS } from "@/lib/constants";
 export default function Footer() {
   return (
     <footer id="contact" className="border-t border-border-custom py-24 relative overflow-hidden bg-transparent">
-      {/* Footer background layer */}
+      
       <div className="absolute inset-0 bg-background z-0 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-8 relative z-20">
         
-        {/* Footer Top Grid */}
+        
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-16">
           
-          {/* Logo & Description column */}
+          
           <div className="col-span-1 md:col-span-6 space-y-6">
             <span className="text-2xl font-serif font-bold text-accent block">
               Len Ấm
@@ -24,7 +24,7 @@ export default function Footer() {
               Nơi bắt đầu những điều nhỏ bé ấm áp từ những sợi len mềm mại. Chúng mình đồng hành cùng bạn trong từng mũi đan và từng dự án tỉ mẩn.
             </p>
             
-            {/* Social Icons */}
+            
             <div className="flex space-x-3.5 pt-2">
               <a
                 href="#facebook"
@@ -57,7 +57,7 @@ export default function Footer() {
             </div>
           </div>
           
-          {/* Column 2 - Links */}
+          
           <div className="col-span-1 md:col-span-3 space-y-4">
             <h4 className="text-xs font-bold text-accent uppercase tracking-wider">Liên kết</h4>
             <ul className="space-y-3 font-medium">
@@ -75,7 +75,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 3 - Contact Address */}
+          
           <div className="col-span-1 md:col-span-3 space-y-4">
             <h4 className="text-xs font-bold text-accent uppercase tracking-wider">Cửa hàng</h4>
             <ul className="space-y-3 text-xs text-ink-muted leading-relaxed font-normal">
@@ -92,7 +92,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Footer Bottom */}
+        
         <div className="pt-8 border-t border-border-custom/50 flex flex-col items-center gap-6">
           <div className="w-10 h-10 rounded-full bg-surface border border-border-custom flex items-center justify-center text-accent shadow-warm-sm">
             <svg
@@ -121,7 +121,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Infinity Loop Decorative Graphic */}
+          
           <div className="text-accent/35 pt-2">
             <svg
               className="w-12 h-6 animate-pulse"

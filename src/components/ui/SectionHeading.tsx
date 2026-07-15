@@ -1,4 +1,4 @@
-/** Cặp eyebrow + tiêu đề section dùng xuyên suốt trang chủ. */
+
 export default function SectionHeading({
   eyebrow,
   title,

@@ -9,7 +9,6 @@ import EmptyState from "@/components/ui/EmptyState";
 import FilterSidebar, { countActiveFilters } from "@/components/yarns/FilterSidebar";
 import { useStore } from "@/store/useStore";
 
-// Grid animation config
 const containerVariants = {
   hidden: { opacity: 0 },
   show: {
@@ -42,7 +41,7 @@ export default function YarnsClient() {
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
-  // Apply filters in memory
+  
   const filteredProducts = products.filter((product) => {
     if (filters.fibers.length > 0 && !filters.fibers.includes(product.fiber)) {
       return false;
@@ -59,7 +58,7 @@ export default function YarnsClient() {
     return true;
   });
 
-  // Apply sorting
+  
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     if (filters.sortBy === "price-asc") {
       return a.price - b.price;
@@ -70,21 +69,21 @@ export default function YarnsClient() {
     if (filters.sortBy === "rating") {
       return b.rating - a.rating;
     }
-    return 0; // default featured
+    return 0; 
   });
 
   const activeFiltersCount = countActiveFilters(filters);
 
   return (
     <main className="flex-grow pt-28 pb-24 px-6 md:px-8 max-w-7xl mx-auto w-full">
-      {/* Breadcrumbs */}
+      
       <nav className="flex items-center gap-2 text-xs text-ink-muted mb-6 tracking-wide" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-accent transition-colors font-medium">Trang chủ</Link>
         <span>/</span>
         <span className="text-ink font-semibold">Sợi len tuyển chọn</span>
       </nav>
 
-      {/* Header Block */}
+      
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-6 border-b border-border-custom/50">
         <div>
           <h1 className="font-serif text-3xl md:text-4xl font-bold leading-[1.2] text-ink mb-2">
@@ -95,9 +94,9 @@ export default function YarnsClient() {
           </p>
         </div>
 
-        {/* Sorting & Filter Actions */}
+        
         <div className="flex items-center gap-3">
-          {/* Mobile Filter Button */}
+          
           <button
             onClick={() => setIsMobileFilterOpen(true)}
             className="md:hidden px-4 py-2 bg-surface hover:bg-hover-fill text-xs font-semibold rounded-btn border border-border-custom text-ink flex items-center gap-2"
@@ -108,7 +107,7 @@ export default function YarnsClient() {
             Bộ lọc {activeFiltersCount > 0 && `(${activeFiltersCount})`}
           </button>
 
-          {/* Sort Control */}
+          
           <div className="flex items-center gap-2 bg-surface px-3 py-1.5 rounded-btn border border-border-custom">
             <span className="text-[10px] text-ink-muted uppercase tracking-wider font-semibold">Sắp xếp</span>
             <select
@@ -125,16 +124,16 @@ export default function YarnsClient() {
         </div>
       </div>
 
-      {/* Layout Grid */}
+      
       <div className="flex gap-10">
-        {/* Desktop Left Sidebar Filter */}
+        
         <aside className="hidden md:block w-64 flex-shrink-0">
           <div className="sticky top-28">
             <FilterSidebar />
           </div>
         </aside>
 
-        {/* Product Grid Panel */}
+        
         <div className="flex-grow">
           {sortedProducts.length === 0 ? (
             <div className="double-bezel-outer shadow-warm-sm w-full">
@@ -180,7 +179,7 @@ export default function YarnsClient() {
         </div>
       </div>
 
-      {/* Mobile filter Overlay Drawer */}
+      
       <Drawer
         isOpen={isMobileFilterOpen}
         onClose={() => setIsMobileFilterOpen(false)}

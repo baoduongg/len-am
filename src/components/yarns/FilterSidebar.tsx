@@ -33,7 +33,6 @@ export function countActiveFilters(filters: {
   );
 }
 
-/** Nhóm filter có thể thu gọn, tự quản lý state đóng/mở. */
 function FilterSection({
   label,
   last = false,
@@ -128,7 +127,7 @@ export default function FilterSidebar() {
 
   return (
     <div className="space-y-6 pr-4">
-      {/* Active Filter Indicators */}
+      
       {activeFiltersCount > 0 && (
         <div className="p-4 bg-surface rounded-inner border border-border-custom/80 shadow-warm-sm">
           <div className="flex items-center justify-between mb-3">
@@ -207,7 +206,7 @@ export default function FilterSidebar() {
       </FilterSection>
 
       <FilterSection label="Khoảng giá (VND)" last contentClassName="space-y-4">
-        {/* Visual range indicator buttons */}
+        
         <div className="grid grid-cols-2 gap-2">
           {QUICK_PRICE_RANGES.map(([min, max]) => {
             const active = filters.priceRange[0] === min && filters.priceRange[1] === max;
@@ -227,7 +226,7 @@ export default function FilterSidebar() {
           })}
         </div>
 
-        {/* Dynamic price input fields */}
+        
         <div className="flex items-center gap-2">
           <div className="relative flex-grow">
             <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[9px] text-ink-muted uppercase">Min</span>

@@ -1,4 +1,4 @@
-/** Trạng thái rỗng: icon + (tiêu đề) + mô tả + hành động (children). */
+
 export default function EmptyState({
   icon,
   title,

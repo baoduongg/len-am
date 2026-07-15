@@ -16,7 +16,7 @@ export default function LoadingScreen() {
       }
     };
 
-    // 1. Wait for document fonts to load
+    
     if (typeof window !== "undefined" && document.fonts) {
       document.fonts.ready
         .then(() => {
@@ -32,7 +32,7 @@ export default function LoadingScreen() {
       fontLoaded = true;
     }
 
-    // 2. Minimum timeout to ensure a smooth, premium presentation of the loader animation
+    
     const timer = setTimeout(() => {
       timeoutDone = true;
       checkLoadingState();
@@ -52,13 +52,13 @@ export default function LoadingScreen() {
           }}
           className="fixed inset-0 z-50 bg-background flex flex-col items-center justify-center select-none"
         >
-          {/* Subtle noise overlay on loading screen to match site texture */}
+          
           <div className="noise-overlay" aria-hidden="true" />
 
           <div className="flex flex-col items-center space-y-6 relative z-10">
-            {/* Elegant Yarn-Loop SVG Animation */}
+            
             <div className="relative w-28 h-28 flex items-center justify-center">
-              {/* Outer decorative soft glow circle */}
+              
               <motion.div
                 initial={{ opacity: 0.3, scale: 0.9 }}
                 animate={{ opacity: [0.3, 0.6, 0.3], scale: [0.9, 1.05, 0.9] }}
@@ -75,7 +75,7 @@ export default function LoadingScreen() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                {/* Simulated yarn ball/loop thread drawing path */}
+                
                 <motion.path
                   d="M 50,50 C 35,20 15,35 30,55 C 45,75 55,75 70,55 C 85,35 65,20 50,50 Z"
                   initial={{ pathLength: 0, opacity: 0 }}
@@ -86,7 +86,7 @@ export default function LoadingScreen() {
                   }}
                 />
                 
-                {/* Secondary inner delicate accent circle */}
+                
                 <motion.circle
                   cx="50"
                   cy="50"
@@ -100,7 +100,7 @@ export default function LoadingScreen() {
               </svg>
             </div>
 
-            {/* Pulsing Brand Typography */}
+            
             <div className="text-center space-y-2">
               <motion.h1
                 initial={{ opacity: 0, y: 10 }}

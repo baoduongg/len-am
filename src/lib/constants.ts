@@ -1,6 +1,6 @@
 export interface NavLink {
   href: string;
-  /** id của section trên trang chủ — dùng cho scroll mượt qua handleHashClick */
+  
   hash?: string;
   label: string;
 }

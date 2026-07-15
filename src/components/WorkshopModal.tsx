@@ -23,7 +23,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
   const [phoneError, setPhoneError] = useState("");
 
   const validatePhone = (p: string) => {
-    // Regex for Vietnamese phone number (10 digits starting with 03, 05, 07, 08, 09)
+    
     const vnPhoneRegex = /^(03|05|07|08|09)\d{8}$/;
     return vnPhoneRegex.test(p);
   };
@@ -42,7 +42,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
 
     setIsSubmitting(true);
 
-    // Simulate server response delay for high-end feel
+    
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
     registerWorkshop({
@@ -69,7 +69,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop blur overlay */}
+          
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
@@ -78,7 +78,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
             className="fixed inset-0 bg-ink backdrop-blur-sm"
           />
 
-          {/* Double-Bezel Card Container */}
+          
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -87,10 +87,10 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
             className="double-bezel-outer w-full max-w-lg shadow-warm-lg relative z-10 pointer-events-auto"
           >
             <div className="double-bezel-inner p-8 md:p-10 text-left relative overflow-hidden bg-surface">
-              {/* Top decoration yarn thread anchor */}
+              
               <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full blur-2xl pointer-events-none" />
 
-              {/* Close Button */}
+              
               <button
                 onClick={handleResetAndClose}
                 disabled={isSubmitting}
@@ -120,7 +120,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
                     </p>
                   </div>
 
-                  {/* Registered Details Summary Card */}
+                  
                   <div className="bg-background border border-border-custom rounded-inner p-5 space-y-3 text-xs text-ink text-left max-w-sm mx-auto">
                     <div className="flex justify-between border-b border-border-custom/50 pb-2">
                       <span className="text-ink-muted font-medium">Họ và tên:</span>
@@ -163,7 +163,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-5">
-                    {/* Full Name field */}
+                    
                     <div className="space-y-1.5">
                       <label htmlFor="modal-name" className="text-[10px] font-bold text-ink uppercase tracking-wider pl-0.5">
                         Họ và tên
@@ -180,7 +180,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
                       />
                     </div>
 
-                    {/* Phone field */}
+                    
                     <div className="space-y-1.5">
                       <label htmlFor="modal-phone" className="text-[10px] font-bold text-ink uppercase tracking-wider pl-0.5">
                         Số điện thoại
@@ -205,7 +205,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
                       )}
                     </div>
 
-                    {/* Session Dropdown field */}
+                    
                     <div className="space-y-1.5">
                       <label htmlFor="modal-session" className="text-[10px] font-bold text-ink uppercase tracking-wider pl-0.5">
                         Chọn buổi học phù hợp
@@ -230,7 +230,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
                       </div>
                     </div>
 
-                    {/* Submit Button */}
+                    
                     <div className="pt-3">
                       <button
                         type="submit"

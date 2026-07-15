@@ -56,14 +56,14 @@ export default function Navbar() {
       <nav className="fixed top-0 left-0 right-0 z-40 transition-all duration-500 bg-surface/85 backdrop-blur-md py-4 shadow-warm-sm border-b border-border-custom/30">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="flex items-center justify-between">
-            {/* Logo */}
+            
             <Link href="/" onClick={handleLogoClick} className="flex items-center space-x-2 group">
               <span className="text-2xl font-serif font-bold text-accent transition-transform duration-300 group-hover:scale-102">
                 Len Ấm
               </span>
             </Link>
 
-            {/* Desktop Navigation Links */}
+            
             <div className="hidden md:flex items-center space-x-10">
               {NAV_LINKS.map((link) => (
                 <Link
@@ -77,9 +77,9 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* Desktop CTAs */}
+            
             <div className="hidden md:flex items-center space-x-6">
-              {/* Shopping Cart Icon with dynamic badge */}
+              
               <motion.button
                 onClick={() => setIsCartOpen(true)}
                 className="p-2 text-ink-muted hover:text-accent transition-colors duration-200 relative focus:outline-none"
@@ -87,7 +87,7 @@ export default function Navbar() {
                 whileTap={{ scale: 0.9 }}
               >
                 <CartIcon className="w-5.5 h-5.5" />
-                {/* Dynamic count badge */}
+                
                 <AnimatePresence>
                   {totalBadgeCount > 0 && (
                     <motion.span
@@ -110,7 +110,7 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* Mobile Menu Button */}
+            
             <div className="flex items-center space-x-4 md:hidden">
               <button
                 onClick={() => setIsCartOpen(true)}
@@ -142,7 +142,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu Dropdown */}
+        
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -180,13 +180,13 @@ export default function Navbar() {
         </AnimatePresence>
       </nav>
 
-      {/* Connected surface: Slide-over Shopping Cart Drawer */}
+      
       <Drawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         title={activeTab === "cart" ? "Giỏ hàng của bạn" : "Workshop đã đăng ký"}
       >
-        {/* Tabs Navigation */}
+        
         <div className="flex border-b border-border-custom/50 my-4 text-xs font-semibold">
           <button
             onClick={() => setActiveTab("cart")}
@@ -213,7 +213,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Drawer Content */}
+        
         {activeTab === "cart" ? (
           /* SHOPPING CART TAB */
           <>
@@ -295,7 +295,7 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Checkout block */}
+            
             {cart.length > 0 && (
               <div className="pt-4 border-t border-border-custom/50 mt-6 space-y-4">
                 <div className="flex items-center justify-between text-sm font-medium">

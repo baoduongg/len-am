@@ -14,7 +14,7 @@ export interface Product {
   weight: "Fingering" | "Sport" | "DK" | "Worsted" | "Chunky";
   yardage: string;
   weightGrams: string;
-  price: number; // in VND
+  price: number; 
   stock: number;
   rating: number;
   reviewsCount: number;
@@ -46,7 +46,7 @@ interface FilterState {
   fibers: string[];
   weights: string[];
   colors: string[];
-  priceRange: [number, number]; // [min, max]
+  priceRange: [number, number]; 
   sortBy: string;
 }
 
@@ -57,16 +57,16 @@ interface StoreState {
   workshopRegistrations: WorkshopRegistration[];
   toasts: ToastMessage[];
   
-  // Toast Actions
+  
   addToast: (message: string, type?: "success" | "info" | "error") => void;
   removeToast: (id: string) => void;
   
-  // Cart Actions
+  
   addToCart: (product: Product, color: YarnColor) => void;
   removeFromCart: (productId: string, colorHex: string) => void;
   updateCartQuantity: (productId: string, colorHex: string, qty: number) => void;
 
-  // Filter Actions
+  
   toggleFiber: (fiber: string) => void;
   toggleWeight: (weight: string) => void;
   toggleColor: (colorName: string) => void;
@@ -74,7 +74,7 @@ interface StoreState {
   setSortBy: (sort: string) => void;
   resetFilters: () => void;
 
-  // Workshop Actions
+  
   registerWorkshop: (registration: Omit<WorkshopRegistration, "registeredAt">) => void;
   cancelWorkshop: (index: number) => void;
   loadWorkshopRegistrations: () => void;
@@ -216,7 +216,7 @@ export const useStore = create<StoreState>((set) => ({
   workshopRegistrations: [],
   toasts: [],
   
-  // Toast Logic
+  
   addToast: (message, type = "success") => set((state) => {
     const newToast: ToastMessage = {
       id: Math.random().toString(36).substring(2, 9),
@@ -229,7 +229,7 @@ export const useStore = create<StoreState>((set) => ({
     toasts: state.toasts.filter((t) => t.id !== id)
   })),
   
-  // Cart Logic
+  
   addToCart: (product, color) => set((state) => {
     const exists = state.cart.some(
       (item) => item.product.id === product.id && item.selectedColor.hex === color.hex
@@ -264,7 +264,7 @@ export const useStore = create<StoreState>((set) => ({
     )
   })),
   
-  // Filter Logic
+  
   toggleFiber: (fiber) => set((state) => {
     const fibers = state.filters.fibers.includes(fiber)
       ? state.filters.fibers.filter((f) => f !== fiber)
@@ -296,7 +296,7 @@ export const useStore = create<StoreState>((set) => ({
   
   resetFilters: () => set({ filters: INITIAL_FILTERS }),
 
-  // Workshop Logic
+  
   registerWorkshop: (registration) => set((state) => {
     const newReg: WorkshopRegistration = {
       ...registration,
