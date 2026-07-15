@@ -31,7 +31,7 @@ export default function ConfirmModal({
             animate={{ opacity: 0.5 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-[#2B2622] backdrop-blur-sm"
+            className="fixed inset-0 bg-ink backdrop-blur-sm"
           />
 
           {/* Double-Bezel Modal Container */}
@@ -64,7 +64,7 @@ export default function ConfirmModal({
                     onConfirm();
                     onClose();
                   }}
-                  className="px-4 py-2.5 rounded-btn bg-accent text-[#FFFCF7] hover:bg-[#A96340] active:scale-[0.98] font-semibold text-xs shadow-warm-sm transition-all duration-200 focus:outline-none"
+                  className="px-4 py-2.5 rounded-btn bg-accent text-surface hover:bg-accent-dark active:scale-[0.98] font-semibold text-xs shadow-warm-sm transition-all duration-200 focus:outline-none"
                 >
                   {confirmText}
                 </button>

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
 import ToastContainer from "@/components/ToastContainer";
 import "./globals.css";
@@ -45,12 +47,14 @@ export default function RootLayout({
       lang="vi"
       className={`${fraunces.variable} ${plusJakartaSans.variable} antialiased`}
     >
-      <body className="min-h-screen flex flex-col bg-background text-foreground antialiased font-sans">
+      <body className="min-h-screen flex flex-col bg-background text-foreground antialiased font-sans overflow-x-hidden selection:bg-accent/15 selection:text-accent">
         {/* Fixed Noise Overlay for Organic Editorial Texture */}
         <div className="noise-overlay" aria-hidden="true" />
         <LoadingScreen />
         <ToastContainer />
+        <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );

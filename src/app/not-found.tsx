@@ -1,14 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "motion/react";
+import CtaButton from "@/components/ui/CtaButton";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground relative overflow-hidden select-none px-6 text-center">
-      {/* Fixed Noise Overlay for Organic Editorial Texture */}
-      <div className="noise-overlay" aria-hidden="true" />
-
+    <main className="flex-grow min-h-[70dvh] flex flex-col items-center justify-center relative overflow-hidden select-none px-6 py-32 text-center">
       {/* Decorative Ambient Circle */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] bg-accent/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -35,25 +32,15 @@ export default function NotFound() {
           </p>
         </div>
 
-        <motion.div 
+        <motion.div
           className="pt-2"
           initial={{ y: 15, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.25, type: "spring", stiffness: 100, damping: 18 }}
         >
-          <Link
-            href="/"
-            className="pl-6 pr-2.5 py-2.5 rounded-btn bg-accent text-[#FFFCF7] flex items-center gap-4 font-semibold text-xs shadow-warm-md hover:bg-[#A96340] active:scale-[0.98] group transition-all duration-300"
-          >
-            <span>Quay về trang chủ</span>
-            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-105">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-3.5 h-3.5 text-[#FFFCF7]">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
-            </div>
-          </Link>
+          <CtaButton href="/">Quay về trang chủ</CtaButton>
         </motion.div>
       </div>
-    </div>
+    </main>
   );
 }

@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { handleHashClick } from "@/utils/navigation";
+import { NAV_LINKS } from "@/lib/constants";
 
 export default function Footer() {
   return (
     <footer id="contact" className="border-t border-border-custom py-24 relative overflow-hidden bg-transparent">
       {/* Footer background layer */}
-      <div className="absolute inset-0 bg-[#FAF6EF] z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-background z-0 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-8 relative z-20">
         
@@ -60,36 +61,17 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-3 space-y-4">
             <h4 className="text-xs font-bold text-accent uppercase tracking-wider">Liên kết</h4>
             <ul className="space-y-3 font-medium">
-              <li>
-                <Link href="/yarns" className="text-xs text-ink-muted hover:text-accent transition-colors">Sản phẩm</Link>
-              </li>
-              <li>
-                <Link
-                  href="/#story"
-                  onClick={(e) => handleHashClick(e, "story")}
-                  className="text-xs text-ink-muted hover:text-accent transition-colors"
-                >
-                  Câu chuyện
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/#workshop"
-                  onClick={(e) => handleHashClick(e, "workshop")}
-                  className="text-xs text-ink-muted hover:text-accent transition-colors"
-                >
-                  Workshop
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/#contact"
-                  onClick={(e) => handleHashClick(e, "contact")}
-                  className="text-xs text-ink-muted hover:text-accent transition-colors"
-                >
-                  Liên hệ
-                </Link>
-              </li>
+              {NAV_LINKS.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    onClick={link.hash ? (e) => handleHashClick(e, link.hash!) : undefined}
+                    className="text-xs text-ink-muted hover:text-accent transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

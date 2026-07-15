@@ -50,7 +50,7 @@ export default function LoadingScreen() {
             opacity: 0,
             transition: { duration: 0.6, ease: [0.32, 0.72, 0, 1] }
           }}
-          className="fixed inset-0 z-50 bg-[#FAF6EF] flex flex-col items-center justify-center select-none"
+          className="fixed inset-0 z-50 bg-background flex flex-col items-center justify-center select-none"
         >
           {/* Subtle noise overlay on loading screen to match site texture */}
           <div className="noise-overlay" aria-hidden="true" />

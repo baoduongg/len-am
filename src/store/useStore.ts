@@ -47,7 +47,6 @@ interface FilterState {
   weights: string[];
   colors: string[];
   priceRange: [number, number]; // [min, max]
-  searchQuery: string;
   sortBy: string;
 }
 
@@ -66,14 +65,12 @@ interface StoreState {
   addToCart: (product: Product, color: YarnColor) => void;
   removeFromCart: (productId: string, colorHex: string) => void;
   updateCartQuantity: (productId: string, colorHex: string, qty: number) => void;
-  clearCart: () => void;
-  
+
   // Filter Actions
   toggleFiber: (fiber: string) => void;
   toggleWeight: (weight: string) => void;
   toggleColor: (colorName: string) => void;
   setPriceRange: (range: [number, number]) => void;
-  setSearchQuery: (query: string) => void;
   setSortBy: (sort: string) => void;
   resetFilters: () => void;
 
@@ -209,7 +206,6 @@ const INITIAL_FILTERS: FilterState = {
   weights: [],
   colors: [],
   priceRange: [100000, 600000],
-  searchQuery: "",
   sortBy: "featured"
 };
 
@@ -235,16 +231,20 @@ export const useStore = create<StoreState>((set) => ({
   
   // Cart Logic
   addToCart: (product, color) => set((state) => {
-    const existingIndex = state.cart.findIndex(
+    const exists = state.cart.some(
       (item) => item.product.id === product.id && item.selectedColor.hex === color.hex
     );
-    
-    if (existingIndex > -1) {
-      const newCart = [...state.cart];
-      newCart[existingIndex].quantity += 1;
-      return { cart: newCart };
+
+    if (exists) {
+      return {
+        cart: state.cart.map((item) =>
+          item.product.id === product.id && item.selectedColor.hex === color.hex
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      };
     }
-    
+
     return {
       cart: [...state.cart, { product, selectedColor: color, quantity: 1 }]
     };
@@ -263,8 +263,6 @@ export const useStore = create<StoreState>((set) => ({
         : item
     )
   })),
-  
-  clearCart: () => set({ cart: [] }),
   
   // Filter Logic
   toggleFiber: (fiber) => set((state) => {
@@ -290,10 +288,6 @@ export const useStore = create<StoreState>((set) => ({
   
   setPriceRange: (range) => set((state) => ({
     filters: { ...state.filters, priceRange: range }
-  })),
-  
-  setSearchQuery: (query) => set((state) => ({
-    filters: { ...state.filters, searchQuery: query }
   })),
   
   setSortBy: (sort) => set((state) => ({

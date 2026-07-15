@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { Product, YarnColor, useStore } from "@/store/useStore";
 import { formatPrice } from "@/utils/format";
+import { IconCircle } from "@/components/ui/CtaButton";
 
 interface ProductCardProps {
   product: Product;
@@ -59,14 +60,14 @@ export default function ProductCard({ product }: ProductCardProps) {
           
           {/* Badge (if featured) */}
           {product.featured && (
-            <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] uppercase tracking-[0.15em] font-semibold bg-accent text-[#FFFCF7] shadow-sm">
+            <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] uppercase tracking-[0.15em] font-semibold bg-accent text-surface shadow-sm">
               Tuyển chọn
             </span>
           )}
 
           {/* Stock warning */}
           {product.stock <= 8 && (
-            <span className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-accent-sage text-[#FFFCF7] shadow-sm">
+            <span className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-accent-sage text-surface shadow-sm">
               Chỉ còn {product.stock} cuộn
             </span>
           )}
@@ -140,23 +141,12 @@ export default function ProductCard({ product }: ProductCardProps) {
               addToCart(product, activeColor);
               addToast(`Đã thêm ${product.name} (${activeColor.name}) vào giỏ`, "success");
             }}
-            className="pl-4 pr-1.5 py-1.5 rounded-btn bg-accent text-[#FFFCF7] flex items-center gap-3 font-medium text-xs shadow-warm-sm hover:bg-[#A96340] active:scale-[0.98] group focus:outline-none"
+            className="pl-4 pr-1.5 py-1.5 rounded-btn bg-accent text-surface flex items-center gap-3 font-medium text-xs shadow-warm-sm hover:bg-accent-dark active:scale-[0.98] group focus:outline-none"
             whileTap={{ scale: 0.96 }}
             transition={{ type: "spring", stiffness: 400, damping: 12 }}
           >
             <span>Thêm vào giỏ</span>
-            {/* Trailing Icon Enclosure */}
-            <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-105">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                className="w-3.5 h-3.5 text-[#FFFCF7]"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-            </div>
+            <IconCircle icon="plus" className="w-6 h-6" />
           </motion.button>
         </div>
       </div>

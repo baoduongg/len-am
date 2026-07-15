@@ -7,7 +7,9 @@
   --ink: #2B2622;
   --ink-muted: #8C8175;
   --accent-terracotta: #C17A56;
+  --accent-terracotta-dark: #A96340;
   --accent-sage: #93A382;
+  --surface-alt: #F4EEE3;
   --border: #EAE2D6;
   --hover-fill: #F0E4D3;
 }
@@ -19,7 +21,9 @@
   --color-ink: var(--ink);
   --color-ink-muted: var(--ink-muted);
   --color-accent: var(--accent-terracotta);
+  --color-accent-dark: var(--accent-terracotta-dark);
   --color-accent-sage: var(--accent-sage);
+  --color-surface-alt: var(--surface-alt);
   --color-border-custom: var(--border);
   --color-hover-fill: var(--hover-fill);
 

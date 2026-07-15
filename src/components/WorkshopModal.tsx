@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useStore } from "@/store/useStore";
+import { IconCircle } from "@/components/ui/CtaButton";
 
 interface WorkshopModalProps {
   isOpen: boolean;
@@ -74,7 +75,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
             animate={{ opacity: 0.5 }}
             exit={{ opacity: 0 }}
             onClick={isSubmitting ? undefined : handleResetAndClose}
-            className="fixed inset-0 bg-[#2B2622] backdrop-blur-sm"
+            className="fixed inset-0 bg-ink backdrop-blur-sm"
           />
 
           {/* Double-Bezel Card Container */}
@@ -120,7 +121,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
                   </div>
 
                   {/* Registered Details Summary Card */}
-                  <div className="bg-[#FAF6EF] border border-border-custom rounded-inner p-5 space-y-3 text-xs text-ink text-left max-w-sm mx-auto">
+                  <div className="bg-background border border-border-custom rounded-inner p-5 space-y-3 text-xs text-ink text-left max-w-sm mx-auto">
                     <div className="flex justify-between border-b border-border-custom/50 pb-2">
                       <span className="text-ink-muted font-medium">Họ và tên:</span>
                       <span className="font-semibold text-right">{name}</span>
@@ -136,13 +137,13 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
                   </div>
 
                   <p className="text-[10px] text-ink-muted italic">
-                    * Bạn có thể xem lại hoặc hủy lớp đã đăng ký trong tab "Workshop" ở Giỏ hàng.
+                    * Bạn có thể xem lại hoặc hủy lớp đã đăng ký trong tab “Workshop” ở Giỏ hàng.
                   </p>
 
                   <div className="pt-2">
                     <button
                       onClick={handleResetAndClose}
-                      className="px-8 py-3 rounded-btn bg-accent text-[#FFFCF7] text-xs font-semibold shadow-warm-sm hover:bg-[#A96340] active:scale-95 transition-all duration-200"
+                      className="px-8 py-3 rounded-btn bg-accent text-surface text-xs font-semibold shadow-warm-sm hover:bg-accent-dark active:scale-95 transition-all duration-200"
                     >
                       Đóng cửa sổ
                     </button>
@@ -234,14 +235,10 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full pl-6 pr-3 py-3.5 rounded-btn bg-accent text-[#FFFCF7] flex items-center justify-between font-semibold text-xs shadow-warm-md hover:bg-[#A96340] active:scale-[0.98] transition-all duration-300 disabled:opacity-75 disabled:cursor-not-allowed group"
+                        className="w-full pl-6 pr-3 py-3.5 rounded-btn bg-accent text-surface flex items-center justify-between font-semibold text-xs shadow-warm-md hover:bg-accent-dark active:scale-[0.98] transition-all duration-300 disabled:opacity-75 disabled:cursor-not-allowed group"
                       >
                         <span>{isSubmitting ? "Đang xử lý đăng ký..." : "Xác nhận đặt chỗ"}</span>
-                        <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-105">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-3 h-3 text-[#FFFCF7]">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-                          </svg>
-                        </div>
+                        <IconCircle className="w-7 h-7" iconClassName="w-3 h-3" />
                       </button>
                     </div>
                   </form>
