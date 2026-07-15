@@ -5,7 +5,6 @@ import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
 import ToastContainer from "@/components/ToastContainer";
 import "./globals.css";
-
 const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["vietnamese", "latin"],
