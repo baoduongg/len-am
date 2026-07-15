@@ -5,6 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import { useStore } from "@/store/useStore";
+import { formatPrice } from "@/utils/format";
+import ConfirmModal from "@/components/ConfirmModal";
+import { handleHashClick } from "@/utils/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,14 +15,20 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState<"cart" | "workshop">("cart");
 
+  const [confirmCancelOpen, setConfirmCancelOpen] = useState(false);
+  const [selectedCancelIndex, setSelectedCancelIndex] = useState<number | null>(null);
+  const [selectedCancelTitle, setSelectedCancelTitle] = useState("");
+
+  const addToast = useStore((state) => state.addToast);
+
   const cart = useStore((state) => state.cart);
   const removeFromCart = useStore((state) => state.removeFromCart);
   const updateCartQuantity = useStore((state) => state.updateCartQuantity);
-  
+
   const workshopRegistrations = useStore((state) => state.workshopRegistrations);
   const cancelWorkshop = useStore((state) => state.cancelWorkshop);
   const loadWorkshopRegistrations = useStore((state) => state.loadWorkshopRegistrations);
-  
+
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const cartTotal = cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
 
@@ -42,11 +51,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
-          scrolled
-            ? "bg-surface/85 backdrop-blur-md py-4 shadow-warm-sm border-b border-border-custom/30"
-            : "bg-transparent py-6"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 bg-surface/85 backdrop-blur-md py-4 shadow-warm-sm border-b border-border-custom/30`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="flex items-center justify-between">
@@ -67,18 +72,21 @@ export default function Navbar() {
               </Link>
               <Link
                 href="/#story"
+                onClick={(e) => handleHashClick(e, "story")}
                 className="text-xs font-semibold text-ink-muted hover:text-accent uppercase tracking-wider transition-colors duration-200"
               >
                 Câu chuyện
               </Link>
               <Link
                 href="/#workshop"
+                onClick={(e) => handleHashClick(e, "workshop")}
                 className="text-xs font-semibold text-ink-muted hover:text-accent uppercase tracking-wider transition-colors duration-200"
               >
                 Workshop
               </Link>
               <Link
                 href="/#contact"
+                onClick={(e) => handleHashClick(e, "contact")}
                 className="text-xs font-semibold text-ink-muted hover:text-accent uppercase tracking-wider transition-colors duration-200"
               >
                 Liên hệ
@@ -88,7 +96,7 @@ export default function Navbar() {
             {/* Desktop CTAs */}
             <div className="hidden md:flex items-center space-x-6">
               {/* Shopping Cart Icon with dynamic badge */}
-              <motion.button 
+              <motion.button
                 onClick={() => setIsCartOpen(true)}
                 className="p-2 text-ink-muted hover:text-accent transition-colors duration-200 relative focus:outline-none"
                 aria-label="Giỏ hàng"
@@ -121,7 +129,7 @@ export default function Navbar() {
                   )}
                 </AnimatePresence>
               </motion.button>
-              
+
               <Link
                 href="/yarns"
                 className="px-5 py-2.5 rounded-btn text-xs font-semibold bg-accent text-[#FFFCF7] hover:bg-[#A96340] hover:shadow-warm-sm transition-all duration-300 active:scale-95"
@@ -132,7 +140,7 @@ export default function Navbar() {
 
             {/* Mobile Menu Button */}
             <div className="flex items-center space-x-4 md:hidden">
-              <button 
+              <button
                 onClick={() => setIsCartOpen(true)}
                 className="p-2 text-ink-muted hover:text-accent relative focus:outline-none"
                 aria-label="Giỏ hàng"
@@ -199,27 +207,36 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/#story"
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => {
+                    setIsOpen(false);
+                    handleHashClick(e, "story");
+                  }}
                   className="text-xs font-semibold text-ink-muted hover:text-accent uppercase tracking-wider py-2"
                 >
                   Câu chuyện
                 </Link>
                 <Link
                   href="/#workshop"
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => {
+                    setIsOpen(false);
+                    handleHashClick(e, "workshop");
+                  }}
                   className="text-xs font-semibold text-ink-muted hover:text-accent uppercase tracking-wider py-2"
                 >
                   Workshop
                 </Link>
                 <Link
                   href="/#contact"
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => {
+                    setIsOpen(false);
+                    handleHashClick(e, "contact");
+                  }}
                   className="text-xs font-semibold text-ink-muted hover:text-accent uppercase tracking-wider py-2"
                 >
                   Liên hệ
                 </Link>
                 <div className="h-px bg-border-custom/50 my-2" />
-                
+
                 <Link
                   href="/yarns"
                   onClick={() => setIsOpen(false)}
@@ -270,21 +287,19 @@ export default function Navbar() {
               <div className="flex border-b border-border-custom/50 my-4 text-xs font-semibold">
                 <button
                   onClick={() => setActiveTab("cart")}
-                  className={`flex-1 pb-3 text-center transition-all border-b-2 ${
-                    activeTab === "cart"
-                      ? "border-accent text-accent"
-                      : "border-transparent text-ink-muted hover:text-ink"
-                  }`}
+                  className={`flex-1 pb-3 text-center transition-all border-b-2 ${activeTab === "cart"
+                    ? "border-accent text-accent"
+                    : "border-transparent text-ink-muted hover:text-ink"
+                    }`}
                 >
                   Giỏ hàng ({cartCount})
                 </button>
                 <button
                   onClick={() => setActiveTab("workshop")}
-                  className={`flex-1 pb-3 text-center transition-all border-b-2 flex items-center justify-center gap-1.5 ${
-                    activeTab === "workshop"
-                      ? "border-accent text-accent"
-                      : "border-transparent text-ink-muted hover:text-ink"
-                  }`}
+                  className={`flex-1 pb-3 text-center transition-all border-b-2 flex items-center justify-center gap-1.5 ${activeTab === "workshop"
+                    ? "border-accent text-accent"
+                    : "border-transparent text-ink-muted hover:text-ink"
+                    }`}
                 >
                   <span>Workshop</span>
                   {workshopRegistrations.length > 0 && (
@@ -338,7 +353,7 @@ export default function Navbar() {
                               className="object-cover"
                             />
                           </div>
-                          
+
                           <div className="flex-grow min-w-0">
                             <h4 className="font-serif text-sm font-bold text-ink truncate">
                               {item.product.name}
@@ -352,26 +367,26 @@ export default function Navbar() {
                                 Màu: {item.selectedColor.name}
                               </span>
                             </div>
-                            
+
                             <div className="flex items-center justify-between mt-3">
                               <div className="flex items-center gap-2 border border-border-custom/60 rounded-btn px-2 py-0.5 bg-background">
                                 <button
                                   onClick={() => updateCartQuantity(item.product.id, item.selectedColor.hex, item.quantity - 1)}
-                                  className="text-xs text-ink hover:text-accent font-bold"
+                                  className="text-xs text-ink hover:text-accent font-bold focus:outline-none"
                                 >
                                   -
                                 </button>
                                 <span className="text-xs font-semibold text-ink">{item.quantity}</span>
                                 <button
                                   onClick={() => updateCartQuantity(item.product.id, item.selectedColor.hex, item.quantity + 1)}
-                                  className="text-xs text-ink hover:text-accent font-bold"
+                                  className="text-xs text-ink hover:text-accent font-bold focus:outline-none"
                                 >
                                   +
                                 </button>
                               </div>
-                              
-                              <span className="text-xs font-semibold text-ink">
-                                {(item.product.price * item.quantity).toLocaleString("vi-VN")}đ
+
+                              <span className="text-xs font-semibold text-ink tabular-nums">
+                                {formatPrice(item.product.price * item.quantity)}
                               </span>
                             </div>
                           </div>
@@ -393,13 +408,13 @@ export default function Navbar() {
                     <div className="pt-4 border-t border-border-custom/50 mt-6 space-y-4">
                       <div className="flex items-center justify-between text-sm font-medium">
                         <span className="text-ink-muted">Tạm tính</span>
-                        <span className="text-ink font-bold text-base">
-                          {cartTotal.toLocaleString("vi-VN")}đ
+                        <span className="text-ink font-bold text-base tabular-nums">
+                          {formatPrice(cartTotal)}
                         </span>
                       </div>
                       <button
-                        onClick={() => alert("Chức năng thanh toán chỉ là giao diện demo.")}
-                        className="w-full py-3.5 bg-accent hover:bg-[#A96340] text-[#FFFCF7] text-xs font-semibold rounded-btn transition-colors shadow-warm-sm"
+                        onClick={() => addToast("Chức năng thanh toán chỉ là giao diện demo.", "info")}
+                        className="w-full py-3.5 bg-accent hover:bg-[#A96340] text-[#FFFCF7] text-xs font-semibold rounded-btn transition-all duration-200 active:scale-[0.98] shadow-warm-sm focus:outline-none"
                       >
                         Tiến hành thanh toán
                       </button>
@@ -421,13 +436,16 @@ export default function Navbar() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                       </svg>
                       <p className="text-xs text-ink-muted">Bạn chưa đăng ký workshop nào.</p>
-                      <a
+                      <Link
                         href="/#workshop"
-                        onClick={() => setIsCartOpen(false)}
+                        onClick={(e) => {
+                          setIsCartOpen(false);
+                          handleHashClick(e, "workshop");
+                        }}
                         className="mt-4 px-4 py-2 bg-accent-sage text-[#FFFCF7] text-xs font-semibold rounded-btn"
                       >
                         Xem lịch học
-                      </a>
+                      </Link>
                     </div>
                   ) : (
                     workshopRegistrations.map((reg, index) => (
@@ -453,9 +471,9 @@ export default function Navbar() {
 
                         <button
                           onClick={() => {
-                            if (confirm(`Bạn có chắc chắn muốn hủy đăng ký lớp học "${reg.session}"?`)) {
-                              cancelWorkshop(index);
-                            }
+                            setSelectedCancelIndex(index);
+                            setSelectedCancelTitle(reg.session);
+                            setConfirmCancelOpen(true);
                           }}
                           className="text-xs text-ink-muted hover:text-red-500 p-1 hover:bg-red-50 rounded-full transition-colors flex-shrink-0"
                           aria-label="Hủy đăng ký"
@@ -471,6 +489,24 @@ export default function Navbar() {
           </>
         )}
       </AnimatePresence>
+
+      <ConfirmModal
+        isOpen={confirmCancelOpen}
+        onClose={() => {
+          setConfirmCancelOpen(false);
+          setSelectedCancelIndex(null);
+        }}
+        onConfirm={() => {
+          if (selectedCancelIndex !== null) {
+            cancelWorkshop(selectedCancelIndex);
+            addToast(`Đã hủy đăng ký lớp học "${selectedCancelTitle}" thành công`, "success");
+          }
+        }}
+        title="Hủy đăng ký Workshop"
+        message={`Bạn có chắc chắn muốn hủy đăng ký lớp học "${selectedCancelTitle}"?`}
+        confirmText="Hủy đăng ký"
+        cancelText="Quay lại"
+      />
     </>
   );
 }

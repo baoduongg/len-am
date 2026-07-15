@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Product, YarnColor, useStore } from "@/store/useStore";
+import { formatPrice } from "@/utils/format";
 
 interface ProductCardProps {
   product: Product;
@@ -12,6 +13,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const [activeColor, setActiveColor] = useState<YarnColor>(product.colors[0]);
   const addToCart = useStore((state) => state.addToCart);
+  const addToast = useStore((state) => state.addToast);
 
   // Spring animations configuration
   const cardSpring = {
@@ -127,15 +129,18 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-border-custom/50">
           <div>
             <span className="text-[11px] uppercase tracking-wider text-ink-muted block font-medium">Giá bán</span>
-            <span className="font-serif text-base font-bold text-ink">
-              {product.price.toLocaleString("vi-VN")}đ
+            <span className="font-serif text-base font-bold text-ink tabular-nums">
+              {formatPrice(product.price)}
             </span>
           </div>
 
           {/* Button-in-Button CTA Architecture */}
           <motion.button
-            onClick={() => addToCart(product, activeColor)}
-            className="pl-4 pr-1.5 py-1.5 rounded-btn bg-accent text-[#FFFCF7] flex items-center gap-3 font-medium text-xs shadow-warm-sm hover:bg-[#A96340] group focus:outline-none"
+            onClick={() => {
+              addToCart(product, activeColor);
+              addToast(`Đã thêm ${product.name} (${activeColor.name}) vào giỏ`, "success");
+            }}
+            className="pl-4 pr-1.5 py-1.5 rounded-btn bg-accent text-[#FFFCF7] flex items-center gap-3 font-medium text-xs shadow-warm-sm hover:bg-[#A96340] active:scale-[0.98] group focus:outline-none"
             whileTap={{ scale: 0.96 }}
             transition={{ type: "spring", stiffness: 400, damping: 12 }}
           >

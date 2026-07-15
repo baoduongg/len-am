@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { useStore, Product } from "@/store/useStore";
+import { formatPrice } from "@/utils/format";
 
 export default function YarnsPage() {
   const {
@@ -21,6 +22,19 @@ export default function YarnsPage() {
   } = useStore();
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [collapsedSections, setCollapsedSections] = useState({
+    fibers: false,
+    weights: false,
+    colors: false,
+    price: false
+  });
+
+  const toggleSection = (section: keyof typeof collapsedSections) => {
+    setCollapsedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   // List of available filter options matching our database
   const fiberOptions = ["Merino", "Alpaca", "Silk", "Cotton", "Linen"];
@@ -95,7 +109,7 @@ export default function YarnsPage() {
   };
 
   const SidebarContent = () => (
-    <div className="space-y-8 pr-4">
+    <div className="space-y-6 pr-4">
       {/* Active Filter Indicators */}
       {activeFiltersCount > 0 && (
         <div className="p-4 bg-surface rounded-inner border border-border-custom/80 shadow-warm-sm">
@@ -105,7 +119,7 @@ export default function YarnsPage() {
             </span>
             <button
               onClick={resetFilters}
-              className="text-[11px] text-accent hover:underline font-medium"
+              className="text-[11px] text-accent hover:underline font-medium focus:outline-none"
             >
               Xóa tất cả
             </button>
@@ -114,39 +128,39 @@ export default function YarnsPage() {
             {filters.fibers.map((f) => (
               <span
                 key={f}
-                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] bg-hover-fill text-ink"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] bg-hover-fill text-ink font-medium"
               >
                 {f}
-                <button onClick={() => toggleFiber(f)} className="hover:text-accent font-bold">×</button>
+                <button onClick={() => toggleFiber(f)} className="hover:text-accent font-bold focus:outline-none">×</button>
               </span>
             ))}
             {filters.weights.map((w) => (
               <span
                 key={w}
-                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] bg-hover-fill text-ink"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] bg-hover-fill text-ink font-medium"
               >
                 {w}
-                <button onClick={() => toggleWeight(w)} className="hover:text-accent font-bold">×</button>
+                <button onClick={() => toggleWeight(w)} className="hover:text-accent font-bold focus:outline-none">×</button>
               </span>
             ))}
             {filters.colors.map((c) => (
               <span
                 key={c}
-                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] bg-hover-fill text-ink"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] bg-hover-fill text-ink font-medium"
               >
                 Màu: {c}
-                <button onClick={() => toggleColor(c)} className="hover:text-accent font-bold">×</button>
+                <button onClick={() => toggleColor(c)} className="hover:text-accent font-bold focus:outline-none">×</button>
               </span>
             ))}
             {(filters.priceRange[0] > 100000 || filters.priceRange[1] < 600000) && (
               <span
                 key="price"
-                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] bg-hover-fill text-ink"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] bg-hover-fill text-ink font-medium"
               >
-                {(filters.priceRange[0]/1000).toFixed(0)}k - {(filters.priceRange[1]/1000).toFixed(0)}k
+                {formatPrice(filters.priceRange[0])} - {formatPrice(filters.priceRange[1])}
                 <button
                   onClick={() => setPriceRange([100000, 600000])}
-                  className="hover:text-accent font-bold"
+                  className="hover:text-accent font-bold focus:outline-none"
                 >
                   ×
                 </button>
@@ -157,133 +171,222 @@ export default function YarnsPage() {
       )}
 
       {/* Filter Category: Fiber Type */}
-      <div>
-        <h4 className="font-serif text-sm font-semibold text-ink mb-3 tracking-wide">
-          Chất liệu (Fiber)
-        </h4>
-        <div className="space-y-2">
-          {fiberOptions.map((fiber) => {
-            const checked = filters.fibers.includes(fiber);
-            return (
-              <label key={fiber} className="flex items-center gap-2.5 text-xs text-ink-muted cursor-pointer hover:text-ink transition-colors">
-                <input
-                  type="checkbox"
-                  checked={checked}
-                  onChange={() => toggleFiber(fiber)}
-                  className="w-4 h-4 rounded border-border-custom text-accent focus:ring-accent accent-accent"
-                />
-                <span className={checked ? "text-ink font-medium" : ""}>{fiber}</span>
-              </label>
-            );
-          })}
-        </div>
+      <div className="border-b border-border-custom/50 pb-4">
+        <button
+          onClick={() => toggleSection("fibers")}
+          className="flex items-center justify-between w-full text-left font-serif text-sm font-semibold text-ink mb-2 tracking-wide focus:outline-none cursor-pointer"
+        >
+          <span>Chất liệu (Fiber)</span>
+          <motion.span
+            animate={{ rotate: collapsedSections.fibers ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+            className="text-ink-muted"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </motion.span>
+        </button>
+        <AnimatePresence initial={false}>
+          {!collapsedSections.fibers && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="overflow-hidden space-y-2 pt-1"
+            >
+              {fiberOptions.map((fiber) => {
+                const checked = filters.fibers.includes(fiber);
+                return (
+                  <label key={fiber} className="flex items-center gap-2.5 text-xs text-ink-muted cursor-pointer hover:text-ink transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggleFiber(fiber)}
+                      className="w-4 h-4 rounded border-border-custom text-accent focus:ring-accent accent-accent"
+                    />
+                    <span className={checked ? "text-ink font-medium" : ""}>{fiber}</span>
+                  </label>
+                );
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Filter Category: Yarn Weight */}
-      <div>
-        <h4 className="font-serif text-sm font-semibold text-ink mb-3 tracking-wide">
-          Độ dày sợi (Weight)
-        </h4>
-        <div className="space-y-2">
-          {weightOptions.map((weight) => {
-            const checked = filters.weights.includes(weight);
-            return (
-              <label key={weight} className="flex items-center gap-2.5 text-xs text-ink-muted cursor-pointer hover:text-ink transition-colors">
-                <input
-                  type="checkbox"
-                  checked={checked}
-                  onChange={() => toggleWeight(weight)}
-                  className="w-4 h-4 rounded border-border-custom text-accent focus:ring-accent accent-accent"
-                />
-                <span className={checked ? "text-ink font-medium" : ""}>{weight}</span>
-              </label>
-            );
-          })}
-        </div>
+      <div className="border-b border-border-custom/50 pb-4">
+        <button
+          onClick={() => toggleSection("weights")}
+          className="flex items-center justify-between w-full text-left font-serif text-sm font-semibold text-ink mb-2 tracking-wide focus:outline-none cursor-pointer"
+        >
+          <span>Độ dày sợi (Weight)</span>
+          <motion.span
+            animate={{ rotate: collapsedSections.weights ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+            className="text-ink-muted"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </motion.span>
+        </button>
+        <AnimatePresence initial={false}>
+          {!collapsedSections.weights && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="overflow-hidden space-y-2 pt-1"
+            >
+              {weightOptions.map((weight) => {
+                const checked = filters.weights.includes(weight);
+                return (
+                  <label key={weight} className="flex items-center gap-2.5 text-xs text-ink-muted cursor-pointer hover:text-ink transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggleWeight(weight)}
+                      className="w-4 h-4 rounded border-border-custom text-accent focus:ring-accent accent-accent"
+                    />
+                    <span className={checked ? "text-ink font-medium" : ""}>{weight}</span>
+                  </label>
+                );
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Filter Category: Color Palette */}
-      <div>
-        <h4 className="font-serif text-sm font-semibold text-ink mb-3 tracking-wide">
-          Màu sắc tuyển chọn
-        </h4>
-        <div className="space-y-2">
-          {colorOptions.map((col) => {
-            const checked = filters.colors.includes(col.name);
-            return (
-              <button
-                key={col.name}
-                onClick={() => toggleColor(col.name)}
-                className="flex items-center justify-between w-full text-left py-1 text-xs text-ink-muted hover:text-ink transition-colors"
-              >
-                <div className="flex items-center gap-2">
-                  <span
-                    className="w-3.5 h-3.5 rounded-full border border-border-custom/50 shadow-sm block"
-                    style={{ backgroundColor: col.hex }}
-                  />
-                  <span className={checked ? "text-ink font-semibold" : ""}>{col.name}</span>
-                </div>
-                {checked && (
-                  <span className="text-accent text-[10px] font-bold">✓</span>
-                )}
-              </button>
-            );
-          })}
-        </div>
+      <div className="border-b border-border-custom/50 pb-4">
+        <button
+          onClick={() => toggleSection("colors")}
+          className="flex items-center justify-between w-full text-left font-serif text-sm font-semibold text-ink mb-2 tracking-wide focus:outline-none cursor-pointer"
+        >
+          <span>Màu sắc tuyển chọn</span>
+          <motion.span
+            animate={{ rotate: collapsedSections.colors ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+            className="text-ink-muted"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </motion.span>
+        </button>
+        <AnimatePresence initial={false}>
+          {!collapsedSections.colors && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="overflow-hidden space-y-2 pt-1"
+            >
+              {colorOptions.map((col) => {
+                const checked = filters.colors.includes(col.name);
+                return (
+                  <button
+                    key={col.name}
+                    onClick={() => toggleColor(col.name)}
+                    className="flex items-center justify-between w-full text-left py-1 text-xs text-ink-muted hover:text-ink transition-colors focus:outline-none cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="w-3.5 h-3.5 rounded-full border border-border-custom/50 shadow-sm block"
+                        style={{ backgroundColor: col.hex }}
+                      />
+                      <span className={checked ? "text-ink font-semibold" : ""}>{col.name}</span>
+                    </div>
+                    {checked && (
+                      <span className="text-accent text-[10px] font-bold">✓</span>
+                    )}
+                  </button>
+                );
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Filter Category: Price Range */}
-      <div>
-        <h4 className="font-serif text-sm font-semibold text-ink mb-3 tracking-wide">
-          Khoảng giá (VND)
-        </h4>
-        
-        {/* Visual range indicator buttons */}
-        <div className="grid grid-cols-2 gap-2 mb-4">
-          <button
-            onClick={() => setPriceRange([100000, 300000])}
-            className={`px-3 py-1.5 rounded-btn border text-[10px] font-medium text-center transition-all ${
-              filters.priceRange[0] === 100000 && filters.priceRange[1] === 300000
-                ? "bg-accent text-[#FFFCF7] border-accent"
-                : "bg-surface hover:bg-hover-fill text-ink-muted border-border-custom"
-            }`}
+      <div className="pb-4">
+        <button
+          onClick={() => toggleSection("price")}
+          className="flex items-center justify-between w-full text-left font-serif text-sm font-semibold text-ink mb-2 tracking-wide focus:outline-none cursor-pointer"
+        >
+          <span>Khoảng giá (VND)</span>
+          <motion.span
+            animate={{ rotate: collapsedSections.price ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+            className="text-ink-muted"
           >
-            100k - 300k
-          </button>
-          <button
-            onClick={() => setPriceRange([300000, 600000])}
-            className={`px-3 py-1.5 rounded-btn border text-[10px] font-medium text-center transition-all ${
-              filters.priceRange[0] === 300000 && filters.priceRange[1] === 600000
-                ? "bg-accent text-[#FFFCF7] border-accent"
-                : "bg-surface hover:bg-hover-fill text-ink-muted border-border-custom"
-            }`}
-          >
-            300k - 600k
-          </button>
-        </div>
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </motion.span>
+        </button>
+        <AnimatePresence initial={false}>
+          {!collapsedSections.price && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="overflow-hidden space-y-4 pt-1"
+            >
+              {/* Visual range indicator buttons */}
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => setPriceRange([100000, 300000])}
+                  className={`px-3 py-1.5 rounded-btn border text-[10px] font-medium text-center transition-all focus:outline-none cursor-pointer ${
+                    filters.priceRange[0] === 100000 && filters.priceRange[1] === 300000
+                      ? "bg-accent text-[#FFFCF7] border-accent"
+                      : "bg-surface hover:bg-hover-fill text-ink-muted border-border-custom"
+                  }`}
+                >
+                  100k - 300k
+                </button>
+                <button
+                  onClick={() => setPriceRange([300000, 600000])}
+                  className={`px-3 py-1.5 rounded-btn border text-[10px] font-medium text-center transition-all focus:outline-none cursor-pointer ${
+                    filters.priceRange[0] === 300000 && filters.priceRange[1] === 600000
+                      ? "bg-accent text-[#FFFCF7] border-accent"
+                      : "bg-surface hover:bg-hover-fill text-ink-muted border-border-custom"
+                  }`}
+                >
+                  300k - 600k
+                </button>
+              </div>
 
-        {/* Dynamic price input fields */}
-        <div className="flex items-center gap-2">
-          <div className="relative flex-grow">
-            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[9px] text-ink-muted uppercase">Min</span>
-            <input
-              type="number"
-              value={filters.priceRange[0]}
-              onChange={(e) => setPriceRange([Number(e.target.value), filters.priceRange[1]])}
-              className="w-full bg-surface border border-border-custom rounded-btn pl-8 pr-2 py-1.5 text-xs text-ink focus:outline-none focus:border-accent"
-            />
-          </div>
-          <span className="text-ink-muted">—</span>
-          <div className="relative flex-grow">
-            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[9px] text-ink-muted uppercase">Max</span>
-            <input
-              type="number"
-              value={filters.priceRange[1]}
-              onChange={(e) => setPriceRange([filters.priceRange[0], Number(e.target.value)])}
-              className="w-full bg-surface border border-border-custom rounded-btn pl-8 pr-2 py-1.5 text-xs text-ink focus:outline-none focus:border-accent"
-            />
-          </div>
-        </div>
+              {/* Dynamic price input fields */}
+              <div className="flex items-center gap-2">
+                <div className="relative flex-grow">
+                  <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[9px] text-ink-muted uppercase">Min</span>
+                  <input
+                    type="number"
+                    value={filters.priceRange[0]}
+                    onChange={(e) => setPriceRange([Number(e.target.value), filters.priceRange[1]])}
+                    className="w-full bg-surface border border-border-custom rounded-btn pl-8 pr-2 py-1.5 text-xs text-ink focus:outline-none focus:border-accent tabular-nums"
+                  />
+                </div>
+                <span className="text-ink-muted">—</span>
+                <div className="relative flex-grow">
+                  <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[9px] text-ink-muted uppercase">Max</span>
+                  <input
+                    type="number"
+                    value={filters.priceRange[1]}
+                    onChange={(e) => setPriceRange([filters.priceRange[0], Number(e.target.value)])}
+                    className="w-full bg-surface border border-border-custom rounded-btn pl-8 pr-2 py-1.5 text-xs text-ink focus:outline-none focus:border-accent tabular-nums"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
@@ -353,20 +456,22 @@ export default function YarnsPage() {
           {/* Product Grid Panel */}
           <div className="flex-grow">
             {sortedProducts.length === 0 ? (
-              <div className="text-center py-20 bg-surface rounded-card border border-border-custom/50 shadow-warm-sm flex flex-col items-center justify-center">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-12 h-12 text-ink-muted/55 mb-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
-                </svg>
-                <h3 className="font-serif text-lg font-bold text-ink mb-1">Không tìm thấy sản phẩm</h3>
-                <p className="text-xs text-ink-muted mb-6 max-w-xs leading-relaxed">
-                  Chúng tôi không tìm thấy cuộn len nào phù hợp với các tiêu chí bộ lọc của bạn.
-                </p>
-                <button
-                  onClick={resetFilters}
-                  className="px-5 py-2.5 bg-accent hover:bg-[#A96340] text-[#FFFCF7] text-xs font-semibold rounded-btn transition-colors shadow-warm-sm focus:outline-none"
-                >
-                  Xóa tất cả bộ lọc
-                </button>
+              <div className="double-bezel-outer shadow-warm-sm w-full">
+                <div className="double-bezel-inner text-center py-20 flex flex-col items-center justify-center bg-surface">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-12 h-12 text-ink-muted/55 mb-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
+                  </svg>
+                  <h3 className="font-serif text-lg font-bold text-ink mb-1">Không tìm thấy sản phẩm</h3>
+                  <p className="text-xs text-ink-muted mb-6 max-w-xs leading-relaxed">
+                    Chúng tôi không tìm thấy cuộn len nào phù hợp với các tiêu chí bộ lọc của bạn.
+                  </p>
+                  <button
+                    onClick={resetFilters}
+                    className="px-5 py-2.5 bg-accent hover:bg-[#A96340] text-[#FFFCF7] text-xs font-semibold rounded-btn transition-colors shadow-warm-sm focus:outline-none active:scale-[0.98]"
+                  >
+                    Xóa tất cả bộ lọc
+                  </button>
+                </div>
               </div>
             ) : (
               <div>

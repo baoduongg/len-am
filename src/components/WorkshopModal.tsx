@@ -11,6 +11,7 @@ interface WorkshopModalProps {
 
 export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
   const registerWorkshop = useStore((state) => state.registerWorkshop);
+  const addToast = useStore((state) => state.addToast);
   
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -48,6 +49,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
       phone: cleanPhone,
       session,
     });
+    addToast(`Đăng ký thành công lớp đan ${session}`, "success");
 
     setIsSubmitting(false);
     setIsSuccess(true);
@@ -172,7 +174,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
                         disabled={isSubmitting}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="Ví dụ: Nguyễn Văn A"
+                        placeholder="Ví dụ: Khánh An"
                         className="w-full px-4 py-3 rounded-btn bg-background border border-border-custom text-ink placeholder-ink-muted/40 text-xs focus:outline-none focus:border-accent transition-colors duration-200 disabled:opacity-50"
                       />
                     </div>

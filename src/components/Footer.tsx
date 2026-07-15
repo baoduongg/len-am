@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { handleHashClick } from "@/utils/navigation";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border-custom py-24 relative overflow-hidden bg-transparent">
+    <footer id="contact" className="border-t border-border-custom py-24 relative overflow-hidden bg-transparent">
       {/* Footer background layer */}
       <div className="absolute inset-0 bg-[#FAF6EF] z-0 pointer-events-none" />
 
@@ -63,13 +64,31 @@ export default function Footer() {
                 <Link href="/yarns" className="text-xs text-ink-muted hover:text-accent transition-colors">Sản phẩm</Link>
               </li>
               <li>
-                <Link href="/#story" className="text-xs text-ink-muted hover:text-accent transition-colors">Câu chuyện</Link>
+                <Link
+                  href="/#story"
+                  onClick={(e) => handleHashClick(e, "story")}
+                  className="text-xs text-ink-muted hover:text-accent transition-colors"
+                >
+                  Câu chuyện
+                </Link>
               </li>
               <li>
-                <Link href="/#workshop" className="text-xs text-ink-muted hover:text-accent transition-colors">Workshop</Link>
+                <Link
+                  href="/#workshop"
+                  onClick={(e) => handleHashClick(e, "workshop")}
+                  className="text-xs text-ink-muted hover:text-accent transition-colors"
+                >
+                  Workshop
+                </Link>
               </li>
               <li>
-                <Link href="/#contact" className="text-xs text-ink-muted hover:text-accent transition-colors">Liên hệ</Link>
+                <Link
+                  href="/#contact"
+                  onClick={(e) => handleHashClick(e, "contact")}
+                  className="text-xs text-ink-muted hover:text-accent transition-colors"
+                >
+                  Liên hệ
+                </Link>
               </li>
             </ul>
           </div>
@@ -109,9 +128,16 @@ export default function Footer() {
             </svg>
           </div>
 
-          <p className="text-xs text-ink-muted text-center font-normal">
-            &copy; {new Date().getFullYear()} Len Ấm. Thủ công từ đôi bàn tay ấm.
-          </p>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-xs text-ink-muted text-center font-normal">
+              &copy; {new Date().getFullYear()} Len Ấm. Thủ công từ đôi bàn tay ấm.
+            </p>
+            <div className="flex gap-4 text-[10px] text-ink-muted/80 font-medium">
+              <a href="#privacy" className="hover:text-accent hover:underline">Chính sách bảo mật</a>
+              <span className="text-border-custom">&bull;</span>
+              <a href="#terms" className="hover:text-accent hover:underline">Điều khoản dịch vụ</a>
+            </div>
+          </div>
 
           {/* Infinity Loop Decorative Graphic */}
           <div className="text-accent/35 pt-2">

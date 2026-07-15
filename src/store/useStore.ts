@@ -36,6 +36,12 @@ export interface WorkshopRegistration {
   registeredAt: string;
 }
 
+export interface ToastMessage {
+  id: string;
+  message: string;
+  type: "success" | "info" | "error";
+}
+
 interface FilterState {
   fibers: string[];
   weights: string[];
@@ -50,6 +56,11 @@ interface StoreState {
   cart: CartItem[];
   filters: FilterState;
   workshopRegistrations: WorkshopRegistration[];
+  toasts: ToastMessage[];
+  
+  // Toast Actions
+  addToast: (message: string, type?: "success" | "info" | "error") => void;
+  removeToast: (id: string) => void;
   
   // Cart Actions
   addToCart: (product: Product, color: YarnColor) => void;
@@ -207,6 +218,20 @@ export const useStore = create<StoreState>((set) => ({
   cart: [],
   filters: INITIAL_FILTERS,
   workshopRegistrations: [],
+  toasts: [],
+  
+  // Toast Logic
+  addToast: (message, type = "success") => set((state) => {
+    const newToast: ToastMessage = {
+      id: Math.random().toString(36).substring(2, 9),
+      message,
+      type
+    };
+    return { toasts: [...state.toasts, newToast] };
+  }),
+  removeToast: (id) => set((state) => ({
+    toasts: state.toasts.filter((t) => t.id !== id)
+  })),
   
   // Cart Logic
   addToCart: (product, color) => set((state) => {

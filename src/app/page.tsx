@@ -1,19 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { useStore } from "@/store/useStore";
 import WorkshopModal from "@/components/WorkshopModal";
+import { handleHashClick } from "@/utils/navigation";
 
 export default function Home() {
   const products = useStore((state) => state.products);
   const featuredProducts = products.filter((p) => p.featured);
   const [isWorkshopOpen, setIsWorkshopOpen] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterSuccess, setNewsletterSuccess] = useState(false);
+  const addToast = useStore((state) => state.addToast);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash) {
+      const hash = window.location.hash.substring(1);
+      const timer = setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          const navbar = document.querySelector("nav");
+          const navbarHeight = navbar ? navbar.offsetHeight : 80;
+          const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+          const offsetPosition = elementPosition - navbarHeight;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "auto",
+          });
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   // Stagger entry configurations
   const fadeUpVariants = {
@@ -60,12 +84,12 @@ export default function Home() {
                   Sợi len tự nhiên cao cấp
                 </span>
                 
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-ink leading-[1.15]">
+                <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-ink leading-[1.15] tracking-tight text-balance">
                   Dệt nên ấm áp <br />
                   <span className="italic font-light text-accent">từ đôi bàn tay</span>
                 </h1>
                 
-                <p className="text-ink-muted text-sm md:text-base max-w-[45ch] font-normal leading-relaxed">
+                <p className="text-ink-muted text-sm md:text-base max-w-[45ch] font-normal leading-relaxed text-balance">
                   Tuyển chọn những dòng len lông cừu Merino, tơ Alpaca tơ hảo hạng nhập khẩu nguyên cuộn. Đồng hành cùng bạn kiến tạo những sản phẩm thủ công tinh xảo, bền vững cùng thời gian.
                 </p>
 
@@ -73,7 +97,7 @@ export default function Home() {
                 <div className="flex flex-wrap gap-4 pt-4 w-full sm:w-auto">
                   <Link
                     href="/yarns"
-                    className="pl-6 pr-2.5 py-2.5 rounded-btn bg-accent text-[#FFFCF7] flex items-center gap-4 font-semibold text-xs shadow-warm-md hover:bg-[#A96340] group transition-colors duration-300"
+                    className="pl-6 pr-2.5 py-2.5 rounded-btn bg-accent text-[#FFFCF7] flex items-center gap-4 font-semibold text-xs shadow-warm-md hover:bg-[#A96340] active:scale-[0.98] group transition-all duration-300"
                   >
                     <span>Khám phá sợi len</span>
                     <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-105">
@@ -83,12 +107,13 @@ export default function Home() {
                     </div>
                   </Link>
 
-                  <a
-                    href="#workshop"
-                    className="px-6 py-3.5 rounded-btn border border-border-custom hover:bg-hover-fill text-ink font-semibold text-xs transition-colors duration-300"
+                  <Link
+                    href="/#workshop"
+                    onClick={(e) => handleHashClick(e, "workshop")}
+                    className="px-6 py-3.5 rounded-btn border border-border-custom hover:bg-hover-fill text-ink font-semibold text-xs active:scale-[0.98] transition-all duration-300"
                   >
                     Lịch học Workshop
-                  </a>
+                  </Link>
                 </div>
               </motion.div>
 
@@ -100,38 +125,42 @@ export default function Home() {
                 <div className="relative w-full max-w-[380px] h-[400px]">
                   {/* Card 1: Under layer, rotated left */}
                   <motion.div 
-                    className="absolute left-0 top-0 w-64 h-80 rounded-card overflow-hidden shadow-warm-md border border-border-custom bg-surface p-2"
+                    className="absolute left-0 top-0 w-64 h-80 double-bezel-outer shadow-warm-md cursor-pointer"
                     initial={{ opacity: 0, scale: 0.9, rotate: -8 }}
                     animate={{ opacity: 1, scale: 1, rotate: -6 }}
                     transition={{ type: "spring", stiffness: 60, damping: 14, delay: 0.3 }}
                     whileHover={{ rotate: -2, y: -5, zIndex: 30 }}
                   >
-                    <div className="relative w-full h-full rounded-inner overflow-hidden">
-                      <Image
-                        src="/hero-yarn.png"
-                        alt="Yarn skeins close up"
-                        fill
-                        priority
-                        className="object-cover"
-                      />
+                    <div className="double-bezel-inner p-2">
+                      <div className="relative w-full h-full rounded-inner overflow-hidden">
+                        <Image
+                          src="/hero-yarn.png"
+                          alt="Yarn skeins close up"
+                          fill
+                          priority
+                          className="object-cover"
+                        />
+                      </div>
                     </div>
                   </motion.div>
 
                   {/* Card 2: Over layer, rotated right */}
                   <motion.div 
-                    className="absolute right-0 bottom-0 w-56 h-72 rounded-card overflow-hidden shadow-warm-lg border-4 border-surface bg-surface p-1.5"
+                    className="absolute right-0 bottom-0 w-56 h-72 double-bezel-outer shadow-warm-lg cursor-pointer"
                     initial={{ opacity: 0, scale: 0.9, rotate: 8 }}
                     animate={{ opacity: 1, scale: 1, rotate: 5 }}
                     transition={{ type: "spring", stiffness: 60, damping: 14, delay: 0.5 }}
                     whileHover={{ rotate: 1, y: -5, zIndex: 30 }}
                   >
-                    <div className="relative w-full h-full rounded-inner overflow-hidden">
-                      <Image
-                        src="/workshop-shop.png"
-                        alt="Knitting workshop hands"
-                        fill
-                        className="object-cover"
-                      />
+                    <div className="double-bezel-inner p-1.5">
+                      <div className="relative w-full h-full rounded-inner overflow-hidden">
+                        <Image
+                          src="/workshop-shop.png"
+                          alt="Knitting workshop hands"
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
                     </div>
                   </motion.div>
                 </div>
@@ -141,188 +170,242 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SECTION 2: VALUE PROPS (Generous Spacing, Micro-cards) */}
-        <section className="py-28 md:py-36 bg-[#FFFCF7]/60 border-y border-border-custom/50">
+        {/* Divider below Hero */}
+        <div className="relative max-w-7xl mx-auto px-6 md:px-8">
+          <div className="h-px bg-border-custom/70 flex justify-between">
+            <div className="w-px h-2.5 bg-border-custom/80 -translate-y-1" />
+            <div className="w-px h-2.5 bg-border-custom/80 -translate-y-1" />
+          </div>
+        </div>
+
+        {/* SECTION 2: VALUE PROPS (Asymmetrical Grid Layout) */}
+        <section id="story" className="py-28 md:py-36 bg-[#F4EEE3]/65 border-b border-border-custom/70">
           <div className="max-w-7xl mx-auto px-6 md:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-20 space-y-3">
-              <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-accent block">Giá trị cốt lõi</span>
-              <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink leading-[1.2]">
-                Mỗi cuộn len là một câu chuyện
-              </h2>
-              <p className="text-xs text-ink-muted leading-relaxed font-normal">
-                Chúng mình tỉ mẩn trong từng khâu lựa chọn, để mỗi sợi len mang lại cảm hứng sáng tạo vô tận và sự trọn vẹn cho bạn.
-              </p>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+              
+              {/* Left Column: Brand Philosophy */}
+              <div className="lg:col-span-5 space-y-6">
+                <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-accent block">Giá trị cốt lõi</span>
+                <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink leading-[1.2] tracking-tight text-balance">
+                  Mỗi cuộn len <br />
+                  <span className="italic font-light text-accent">là một câu chuyện</span>
+                </h2>
+                <p className="text-xs text-ink-muted leading-relaxed font-normal max-w-sm">
+                  Chúng mình tỉ mẩn trong từng khâu lựa chọn, để mỗi sợi len mang lại cảm hứng sáng tạo vô tận và sự trọn vẹn cho bạn.
+                </p>
+                
+                <div className="border-l-2 border-accent/40 pl-4 py-1 italic text-xs text-ink-muted leading-relaxed max-w-sm">
+                  "Chúng mình tin rằng mỗi mũi đan là một khoảnh khắc kết nối giữa đôi tay và tâm hồn. Không vội vã, không tự động hóa."
+                </div>
+              </div>
+
+              {/* Right Column: Staggered Value Cards */}
+              <motion.div 
+                className="lg:col-span-7 space-y-6 flex flex-col items-stretch"
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-100px" }}
+              >
+                {/* Prop 1: Traceable Fibers */}
+                <motion.div variants={fadeUpVariants} className="double-bezel-outer shadow-warm-sm hover:shadow-warm-md max-w-2xl">
+                  <div className="double-bezel-inner p-6 flex gap-5 items-start">
+                    <div className="w-10 h-10 rounded-full bg-accent/5 border border-accent/20 flex items-center justify-center text-accent flex-shrink-0">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-.778.099-1.533.284-2.253" />
+                      </svg>
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="font-serif text-sm font-bold text-ink">Nguồn gốc minh bạch</h3>
+                      <p className="text-xs text-ink-muted leading-relaxed font-normal">
+                        Từng lô sợi đều có mã định danh trang trại, cam kết quy trình chăn nuôi nhân đạo và thu hoạch nhân văn từ các đồng cỏ tự nhiên.
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Prop 2: Naturally Dyed */}
+                <motion.div variants={fadeUpVariants} className="double-bezel-outer shadow-warm-sm hover:shadow-warm-md max-w-2xl lg:translate-x-6">
+                  <div className="double-bezel-inner p-6 flex gap-5 items-start">
+                    <div className="w-10 h-10 rounded-full bg-accent-sage/5 border border-accent-sage/20 flex items-center justify-center text-accent-sage flex-shrink-0">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v18M3 12h18M12 3a9 9 0 1 1 0 18A9 9 0 0 1 12 3Z" />
+                      </svg>
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="font-serif text-sm font-bold text-ink">Màu sắc thảo mộc</h3>
+                      <p className="text-xs text-ink-muted leading-relaxed font-normal">
+                        Nhuộm thủ công từ vỏ quả óc chó, củ nghệ và chàm tự nhiên. Đảm bảo dải màu sắc mộc mạc và hoàn toàn không hóa chất gây kích ứng.
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Prop 3: Slow Spun */}
+                <motion.div variants={fadeUpVariants} className="double-bezel-outer shadow-warm-sm hover:shadow-warm-md max-w-2xl">
+                  <div className="double-bezel-inner p-6 flex gap-5 items-start">
+                    <div className="w-10 h-10 rounded-full bg-accent/5 border border-accent/20 flex items-center justify-center text-accent flex-shrink-0">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 21m0 0l-.813-5.096m.813 5.096h6.75M9.813 15.904a8.25 8.25 0 0113.128-6.09m-13.128 6.09a9.022 9.022 0 01-5.626-4.938m0 0L3 11m.248-1.127A8.25 8.25 0 0118.067 4.19M3.248 9.873a9.023 9.023 0 005.626 4.939m0 0l-.813-5.096H3.248" />
+                      </svg>
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="font-serif text-sm font-bold text-ink">Chế tác chậm rãi</h3>
+                      <p className="text-xs text-ink-muted leading-relaxed font-normal">
+                        Các xưởng kéo sợi gia đình gìn giữ nghề kéo sợi chậm qua nhiều thế hệ, giữ nguyên độ xốp phồng tự nhiên của xơ lông thú.
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              </motion.div>
+              
             </div>
-
-            <motion.div 
-              className="grid grid-cols-1 md:grid-cols-3 gap-8"
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-100px" }}
-            >
-              {/* Prop 1: Traceable Fibers */}
-              <motion.div variants={fadeUpVariants} className="double-bezel-outer shadow-warm-sm hover:shadow-warm-md">
-                <div className="double-bezel-inner p-8 space-y-4">
-                  <div className="w-10 h-10 rounded-full bg-accent/5 border border-accent/20 flex items-center justify-center text-accent">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-.778.099-1.533.284-2.253" />
-                    </svg>
-                  </div>
-                  <h3 className="font-serif text-lg font-bold text-ink">Nguồn gốc minh bạch</h3>
-                  <p className="text-xs text-ink-muted leading-relaxed font-normal">
-                    Từng lô sợi đều có mã định danh trang trại, cam kết quy trình chăn nuôi nhân đạo và thu hoạch nhân văn từ các đồng cỏ tự nhiên.
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* Prop 2: Naturally Dyed */}
-              <motion.div variants={fadeUpVariants} className="double-bezel-outer shadow-warm-sm hover:shadow-warm-md">
-                <div className="double-bezel-inner p-8 space-y-4">
-                  <div className="w-10 h-10 rounded-full bg-accent-sage/5 border border-accent-sage/20 flex items-center justify-center text-accent-sage">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v18M3 12h18M12 3a9 9 0 1 1 0 18A9 9 0 0 1 12 3Z" />
-                    </svg>
-                  </div>
-                  <h3 className="font-serif text-lg font-bold text-ink">Màu sắc thảo mộc</h3>
-                  <p className="text-xs text-ink-muted leading-relaxed font-normal">
-                    Nhuộm thủ công từ vỏ quả óc chó, củ nghệ và chàm tự nhiên. Đảm bảo dải màu sắc mộc mạc và hoàn toàn không hóa chất gây kích ứng.
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* Prop 3: Slow Spun */}
-              <motion.div variants={fadeUpVariants} className="double-bezel-outer shadow-warm-sm hover:shadow-warm-md">
-                <div className="double-bezel-inner p-8 space-y-4">
-                  <div className="w-10 h-10 rounded-full bg-accent/5 border border-accent/20 flex items-center justify-center text-accent">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 21m0 0l-.813-5.096m.813 5.096h6.75M9.813 15.904a8.25 8.25 0 0113.128-6.09m-13.128 6.09a9.022 9.022 0 01-5.626-4.938m0 0L3 11m.248-1.127A8.25 8.25 0 0118.067 4.19M3.248 9.873a9.023 9.023 0 005.626 4.939m0 0l-.813-5.096H3.248" />
-                    </svg>
-                  </div>
-                  <h3 className="font-serif text-lg font-bold text-ink">Chế tác chậm rãi</h3>
-                  <p className="text-xs text-ink-muted leading-relaxed font-normal">
-                    Các xưởng kéo sợi gia đình gìn giữ nghề kéo sợi chậm qua nhiều thế hệ, giữ nguyên độ xốp phồng tự nhiên của xơ lông thú.
-                  </p>
-                </div>
-              </motion.div>
-            </motion.div>
           </div>
         </section>
 
-        {/* SECTION 3: FEATURED CATEGORIES (Asymmetrical Bento Grid) */}
+        {/* SECTION 3: FINISHED CREATIONS SHOWCASE (Asymmetrical Bento Grid) */}
         <section className="py-28 md:py-36">
           <div className="max-w-7xl mx-auto px-6 md:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
               <div className="space-y-3">
-                <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-accent block">Chất liệu tuyển chọn</span>
-                <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink leading-[1.2]">Bộ sưu tập sợi tự nhiên</h2>
+                <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-accent block">Cảm hứng sáng tạo</span>
+                <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink leading-[1.2] tracking-tight text-balance">Thành phẩm từ đôi bàn tay</h2>
               </div>
               <Link 
                 href="/yarns" 
                 className="text-xs font-semibold text-accent hover:underline flex items-center gap-1.5"
               >
-                <span>Xem tất cả danh mục</span>
+                <span>Xem chất liệu len sợi</span>
                 <span>→</span>
               </Link>
             </div>
 
             {/* Bento Grid Architecture */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[280px]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[440px]">
               
-              {/* Category 1: Merino Wool */}
-              <Link 
-                href="/yarns" 
-                className="md:col-span-2 group relative rounded-card overflow-hidden border border-border-custom/50 shadow-warm-md flex flex-col justify-end p-8"
+              {/* Creation 1: Merino Cable-Knit Cardigan */}
+              <div 
+                className="md:col-span-2 group double-bezel-outer shadow-warm-md hover:shadow-warm-lg"
               >
-                <div className="absolute inset-0 bg-[#2B2622]/20 z-10 transition-colors duration-500 group-hover:bg-[#2B2622]/35" />
-                <Image
-                  src="/product-merino.png"
-                  alt="Merino collection"
-                  fill
-                  className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                />
-                <div className="relative z-20 space-y-1 text-[#FFFCF7]">
-                  <span className="text-[9px] uppercase tracking-widest font-semibold bg-accent/80 px-2 py-0.5 rounded-full inline-block">Mềm mại nhất</span>
-                  <h3 className="font-serif text-2xl font-bold">Lông cừu Merino</h3>
-                  <p className="text-[11px] text-[#FFFCF7]/80 font-light max-w-sm">
-                    Dòng sợi đàn hồi vượt trội, cực mềm và không dặm ngứa cho mọi làn da.
-                  </p>
+                <div className="double-bezel-inner p-1 relative overflow-hidden">
+                  <div className="relative w-full h-full rounded-inner overflow-hidden flex flex-col justify-end p-5">
+                    <div className="absolute inset-0 bg-[#2B2622]/10 z-10 transition-colors duration-500 group-hover:bg-[#2B2622]/20" />
+                    <Image
+                      src="/merino-creation.png"
+                      alt="Merino Cardigan"
+                      fill
+                      className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                    />
+                    <div className="relative z-20 w-full mt-auto">
+                      <div className="p-4 md:p-5 rounded-xl bg-surface/90 backdrop-blur-md border border-border-custom/40 shadow-warm-sm space-y-1 text-ink">
+                        <span className="text-[9px] uppercase tracking-widest font-bold text-accent block">Áo len vặn thừng</span>
+                        <h3 className="font-serif text-base md:text-lg font-bold text-ink leading-tight">Áo Cardigan Merino Cổ Điển</h3>
+                        <p className="text-[10px] text-ink-muted font-normal leading-relaxed max-w-lg">
+                          Thiết kế vặn thừng truyền thống được dệt thủ công từ sợi lông cừu Merino Extra Fine siêu mềm mại.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </Link>
+              </div>
 
-              {/* Category 2: Alpaca Cloud */}
-              <Link 
-                href="/yarns" 
-                className="md:col-span-1 group relative rounded-card overflow-hidden border border-border-custom/50 shadow-warm-md flex flex-col justify-end p-8"
+              {/* Creation 2: Baby Alpaca Shawl */}
+              <div 
+                className="md:col-span-1 group double-bezel-outer shadow-warm-md hover:shadow-warm-lg"
               >
-                <div className="absolute inset-0 bg-[#2B2622]/20 z-10 transition-colors duration-500 group-hover:bg-[#2B2622]/35" />
-                <Image
-                  src="/product-wool.png"
-                  alt="Alpaca collection"
-                  fill
-                  className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                />
-                <div className="relative z-20 space-y-1 text-[#FFFCF7]">
-                  <span className="text-[9px] uppercase tracking-widest font-semibold bg-accent-sage/80 px-2 py-0.5 rounded-full inline-block">Ấm áp tối đa</span>
-                  <h3 className="font-serif text-2xl font-bold">Baby Alpaca</h3>
-                  <p className="text-[11px] text-[#FFFCF7]/80 font-light">
-                    Độ phồng xốp tối ưu với cấu trúc rỗng giữ ấm siêu hạng.
-                  </p>
+                <div className="double-bezel-inner p-1 relative overflow-hidden">
+                  <div className="relative w-full h-full rounded-inner overflow-hidden flex flex-col justify-end p-5">
+                    <div className="absolute inset-0 bg-[#2B2622]/10 z-10 transition-colors duration-500 group-hover:bg-[#2B2622]/20" />
+                    <Image
+                      src="/alpaca-creation.png"
+                      alt="Baby Alpaca Shawl"
+                      fill
+                      className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                    />
+                    <div className="relative z-20 w-full mt-auto">
+                      <div className="p-4 md:p-5 rounded-xl bg-surface/90 backdrop-blur-md border border-border-custom/40 shadow-warm-sm space-y-1 text-ink">
+                        <span className="text-[9px] uppercase tracking-widest font-bold text-accent block">Khăn dệt tay</span>
+                        <h3 className="font-serif text-base md:text-lg font-bold text-ink leading-tight">Khăn Choàng Mây Alpaca</h3>
+                        <p className="text-[10px] text-ink-muted font-normal leading-relaxed">
+                          Độ xốp mịn bay bổng dệt từ tơ Alpaca rỗng mang lại sự nhẹ bẫng và giữ ấm tuyệt hảo.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </Link>
+              </div>
 
-              {/* Category 3: Egyptian Cotton */}
-              <Link 
-                href="/yarns" 
-                className="md:col-span-1 group relative rounded-card overflow-hidden border border-border-custom/50 shadow-warm-md flex flex-col justify-end p-8"
+              {/* Creation 3: Organic Cotton Toy */}
+              <div 
+                className="md:col-span-1 group double-bezel-outer shadow-warm-md hover:shadow-warm-lg"
               >
-                <div className="absolute inset-0 bg-[#2B2622]/20 z-10 transition-colors duration-500 group-hover:bg-[#2B2622]/35" />
-                <Image
-                  src="/product-cotton.png"
-                  alt="Organic cotton collection"
-                  fill
-                  className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                />
-                <div className="relative z-20 space-y-1 text-[#FFFCF7]">
-                  <span className="text-[9px] uppercase tracking-widest font-semibold bg-accent/80 px-2 py-0.5 rounded-full inline-block">Hữu cơ 100%</span>
-                  <h3 className="font-serif text-2xl font-bold">Sợi bông Cotton</h3>
-                  <p className="text-[11px] text-[#FFFCF7]/80 font-light">
-                    Sợi mềm mịn, mát lành thích hợp nhất cho tiết trời mùa xuân hè.
-                  </p>
+                <div className="double-bezel-inner p-1 relative overflow-hidden">
+                  <div className="relative w-full h-full rounded-inner overflow-hidden flex flex-col justify-end p-5">
+                    <div className="absolute inset-0 bg-[#2B2622]/10 z-10 transition-colors duration-500 group-hover:bg-[#2B2622]/20" />
+                    <Image
+                      src="/cotton-creation.png"
+                      alt="Amigurumi Toy"
+                      fill
+                      className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                    />
+                    <div className="relative z-20 w-full mt-auto">
+                      <div className="p-4 md:p-5 rounded-xl bg-surface/90 backdrop-blur-md border border-border-custom/40 shadow-warm-sm space-y-1 text-ink">
+                        <span className="text-[9px] uppercase tracking-widest font-bold text-accent block">Đồ chơi & Phụ kiện</span>
+                        <h3 className="font-serif text-base md:text-lg font-bold text-ink leading-tight">Thú Bông Amigurumi Trẻ Em</h3>
+                        <p className="text-[10px] text-ink-muted font-normal leading-relaxed">
+                          Đan thủ công từ bông hữu cơ Ai Cập tự nhiên, an toàn tuyệt đối cho bé.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </Link>
+              </div>
 
-              {/* Category 4: Belgian Linen Flax */}
-              <Link 
-                href="/yarns" 
-                className="md:col-span-2 group relative rounded-card overflow-hidden border border-border-custom/50 shadow-warm-md flex flex-col justify-end p-8"
+              {/* Creation 4: Flax Linen Knitwear */}
+              <div 
+                className="md:col-span-2 group double-bezel-outer shadow-warm-md hover:shadow-warm-lg"
               >
-                <div className="absolute inset-0 bg-[#2B2622]/20 z-10 transition-colors duration-500 group-hover:bg-[#2B2622]/35" />
-                <Image
-                  src="/workshop-shop.png"
-                  alt="Linen Flax collection"
-                  fill
-                  className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                />
-                <div className="relative z-20 space-y-1 text-[#FFFCF7]">
-                  <span className="text-[9px] uppercase tracking-widest font-semibold bg-accent-sage/80 px-2 py-0.5 rounded-full inline-block">Mộc mạc & Thấm hút</span>
-                  <h3 className="font-serif text-2xl font-bold">Belgian Flax Linen</h3>
-                  <p className="text-[11px] text-[#FFFCF7]/80 font-light max-w-sm">
-                    Sợi lanh dệt thủ công mộc mạc mang nét rũ phóng khoáng vượt thời gian.
-                  </p>
+                <div className="double-bezel-inner p-1 relative overflow-hidden">
+                  <div className="relative w-full h-full rounded-inner overflow-hidden flex flex-col justify-end p-5">
+                    <div className="absolute inset-0 bg-[#2B2622]/10 z-10 transition-colors duration-500 group-hover:bg-[#2B2622]/20" />
+                    <Image
+                      src="/linen-creation.png"
+                      alt="Linen Knitwear"
+                      fill
+                      className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                    />
+                    <div className="relative z-20 w-full mt-auto">
+                      <div className="p-4 md:p-5 rounded-xl bg-surface/90 backdrop-blur-md border border-border-custom/40 shadow-warm-sm space-y-1 text-ink">
+                        <span className="text-[9px] uppercase tracking-widest font-bold text-accent block">Thời trang hè</span>
+                        <h3 className="font-serif text-base md:text-lg font-bold text-ink leading-tight">Áo Dệt Kim Mùa Hè Flax Linen</h3>
+                        <p className="text-[10px] text-ink-muted font-normal leading-relaxed max-w-lg">
+                          Sợi lanh Bỉ dệt thưa mộc mạc dệt tay phóng khoáng, tạo cảm giác thoáng mát tự nhiên ngày hè.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </Link>
+              </div>
+
             </div>
           </div>
         </section>
 
+        {/* Divider above Bestsellers */}
+        <div className="relative max-w-7xl mx-auto px-6 md:px-8">
+          <div className="h-px bg-border-custom/70 flex justify-between">
+            <div className="w-px h-2.5 bg-border-custom/80 -translate-y-1" />
+            <div className="w-px h-2.5 bg-border-custom/80 -translate-y-1" />
+          </div>
+        </div>
+
         {/* SECTION 4: BESTSELLERS GRID (Reusing ProductCard) */}
-        <section className="py-28 md:py-36 bg-[#FFFCF7]/60 border-t border-border-custom/50">
+        <section className="py-28 md:py-36 bg-[#F4EEE3]/65 border-b border-border-custom/70">
           <div className="max-w-7xl mx-auto px-6 md:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
               <div className="space-y-3">
                 <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-accent block">Được yêu thích nhất</span>
-                <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink leading-[1.2]">Cuộn len bán chạy nhất</h2>
+                <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink leading-[1.2] tracking-tight text-balance">Cuộn len bán chạy nhất</h2>
               </div>
               <Link 
                 href="/yarns" 
@@ -350,7 +433,7 @@ export default function Home() {
               <div className="double-bezel-inner p-10 md:p-16 text-center space-y-6 flex flex-col items-center">
                 <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-accent block">Cộng đồng đan len</span>
                 
-                <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink leading-[1.2] max-w-xl">
+                <h2 className="font-serif text-3xl md:text-5xl font-bold text-ink leading-[1.2] tracking-tight text-balance max-w-xl">
                   Nhận những câu chuyện ấm áp qua hộp thư
                 </h2>
                 
@@ -358,58 +441,99 @@ export default function Home() {
                   Đăng ký để nhận thông tin về các dòng len tuyển chọn mới về hàng, bài viết chia sẻ kỹ thuật đan tay nâng cao và mã giảm giá 10% cho đơn hàng đầu tiên.
                 </p>
 
-                {/* Email Sign Up Form */}
-                <form 
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    alert("Cảm ơn bạn đã đăng ký thư nhận tin!");
-                  }}
-                  className="w-full max-w-md pt-4 flex flex-col sm:flex-row gap-3"
-                >
-                  <input
-                    type="email"
-                    required
-                    placeholder="Địa chỉ email của bạn..."
-                    className="flex-grow bg-background border border-border-custom rounded-btn px-4 py-3 text-xs text-ink focus:outline-none focus:border-accent transition-colors shadow-inner"
-                  />
-                  <button
-                    type="submit"
-                    className="px-6 py-3.5 rounded-btn bg-accent text-[#FFFCF7] font-semibold text-xs shadow-warm-sm hover:bg-[#A96340] active:scale-[0.98] transition-all focus:outline-none"
-                  >
-                    Đăng ký thư
-                  </button>
-                </form>
+                {/* Email Sign Up Form with Inline Success state */}
+                <div className="w-full max-w-md pt-2 flex flex-col items-center">
+                  <AnimatePresence mode="wait">
+                    {!newsletterSuccess ? (
+                      <motion.form 
+                        key="newsletter-form"
+                        initial={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          setNewsletterSuccess(true);
+                          addToast("Đăng ký nhận thư tin thành công!", "success");
+                        }}
+                        className="w-full flex flex-col sm:flex-row gap-3"
+                      >
+                        <input
+                          type="email"
+                          required
+                          value={newsletterEmail}
+                          onChange={(e) => setNewsletterEmail(e.target.value)}
+                          placeholder="Địa chỉ email của bạn..."
+                          className="flex-grow bg-background border border-border-custom rounded-btn px-4 py-3 text-xs text-ink focus:outline-none focus:border-accent transition-colors shadow-inner"
+                        />
+                        <button
+                          type="submit"
+                          className="px-6 py-3.5 rounded-btn bg-accent text-[#FFFCF7] font-semibold text-xs shadow-warm-sm hover:bg-[#A96340] active:scale-[0.98] transition-all focus:outline-none flex-shrink-0"
+                        >
+                          Đăng ký thư
+                        </button>
+                      </motion.form>
+                    ) : (
+                      <motion.div 
+                        key="newsletter-success"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-center space-y-2 py-4"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-accent-sage/10 text-accent-sage flex items-center justify-center mx-auto border border-accent-sage/30 shadow-warm-sm">
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <p className="text-xs font-semibold text-ink">
+                          Chào mừng bạn ghé thăm thế giới len ấm!
+                        </p>
+                        <p className="text-[11px] text-ink-muted">
+                          Hộp thư <span className="font-semibold text-accent">{newsletterEmail}</span> đã được ghi nhận.
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
+        {/* Divider above Workshop */}
+        <div className="relative max-w-7xl mx-auto px-6 md:px-8">
+          <div className="h-px bg-border-custom/70 flex justify-between">
+            <div className="w-px h-2.5 bg-border-custom/80 -translate-y-1" />
+            <div className="w-px h-2.5 bg-border-custom/80 -translate-y-1" />
+          </div>
+        </div>
+
         {/* SECTION 6: WORKSHOP (Extra value prop highlight) */}
-        <section id="workshop" className="py-20 bg-surface/30 border-t border-border-custom/50">
+        <section id="workshop" className="py-28 md:py-36 bg-[#F4EEE3]/35">
           <div className="max-w-7xl mx-auto px-6 md:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="relative w-full aspect-[4/3] rounded-card overflow-hidden shadow-warm-md border border-border-custom p-2 bg-surface">
-                <div className="relative w-full h-full rounded-inner overflow-hidden">
-                  <Image
-                    src="/workshop-shop.png"
-                    alt="Len Ấm workshop space"
-                    fill
-                    className="object-cover"
-                  />
+              <div className="w-full aspect-[4/3] double-bezel-outer shadow-warm-md">
+                <div className="double-bezel-inner p-2">
+                  <div className="relative w-full h-full rounded-inner overflow-hidden">
+                    <Image
+                      src="/workshop-shop.png"
+                      alt="Len Ấm workshop space"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="space-y-6">
                 <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-accent block">Trải nghiệm thủ công</span>
-                <h2 className="font-serif text-3xl md:text-4xl font-bold text-ink leading-[1.2]">
+                <h2 className="font-serif text-3xl md:text-4xl font-bold text-ink leading-[1.2] tracking-tight text-balance">
                   Lớp học Đan len cuối tuần
                 </h2>
-                <p className="text-xs text-ink-muted leading-relaxed">
+                <p className="text-xs text-ink-muted leading-relaxed max-w-lg">
                   Gác lại những bộn bề công việc, tìm về sự tĩnh lặng qua từng đường kim mũi chỉ. Workshop của chúng mình hướng dẫn từ cơ bản đến nâng cao tại không gian ấm cúng tại Sài Gòn, phục vụ sẵn trà thảo mộc thơm lành.
                 </p>
                 <div className="pt-2">
                   <button 
                     onClick={() => setIsWorkshopOpen(true)}
-                    className="pl-6 pr-2.5 py-2.5 rounded-btn bg-accent-sage text-[#FFFCF7] flex items-center gap-4 font-semibold text-xs shadow-warm-sm hover:opacity-90 group transition-all duration-300"
+                    className="pl-6 pr-2.5 py-2.5 rounded-btn bg-accent-sage text-[#FFFCF7] flex items-center gap-4 font-semibold text-xs shadow-warm-sm hover:opacity-90 active:scale-[0.98] group transition-all duration-300"
                   >
                     <span>Đặt chỗ ngay</span>
                     <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-500 group-hover:translate-x-0.5 group-hover:scale-105">
