@@ -12,31 +12,30 @@ export function scrollToSection(targetId: string, behavior: ScrollBehavior = "sm
   return true;
 }
 
+function navigateHome(
+  e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
+  scroll: () => boolean,
+  url: string
+) {
+  if (typeof window === "undefined" || window.location.pathname !== "/") return;
+  e.preventDefault();
+  if (scroll()) window.history.pushState(null, "", url);
+}
+
 export function handleHashClick(
   e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
   targetId: string
 ) {
-  if (typeof window === "undefined") return;
-
-  
-  if (window.location.pathname === "/") {
-    e.preventDefault();
-    if (scrollToSection(targetId)) {
-      
-      window.history.pushState(null, "", `#${targetId}`);
-    }
-  }
+  navigateHome(e, () => scrollToSection(targetId), `#${targetId}`);
 }
 
 export function handleLogoClick(e: React.MouseEvent<HTMLAnchorElement>) {
-  if (typeof window === "undefined") return;
-
-  if (window.location.pathname === "/") {
-    e.preventDefault();
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-    window.history.pushState(null, "", "/");
-  }
+  navigateHome(
+    e,
+    () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return true;
+    },
+    "/"
+  );
 }
