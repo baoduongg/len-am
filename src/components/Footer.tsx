@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { handleHashClick } from "@/utils/navigation";
 import { NAV_LINKS } from "@/lib/constants";
 
 export default function Footer() {
@@ -65,7 +64,6 @@ export default function Footer() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    onClick={link.hash ? (e) => handleHashClick(e, link.hash!) : undefined}
                     className="text-xs text-ink-muted hover:text-accent transition-colors"
                   >
                     {link.label}

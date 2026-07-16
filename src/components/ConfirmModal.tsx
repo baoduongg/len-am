@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "motion/react";
+import { useBodyScrollLock } from "@/utils/useBodyScrollLock";
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ export default function ConfirmModal({
   confirmText = "Xác nhận",
   cancelText = "Hủy bỏ"
 }: ConfirmModalProps) {
+  useBodyScrollLock(isOpen);
   return (
     <AnimatePresence>
       {isOpen && (

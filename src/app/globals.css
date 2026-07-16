@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
-
 :root {
   --surface: #FFFCF7;
   --ink: #2B2622;
@@ -14,10 +12,6 @@
   --hover-fill: #F0E4D3;
   --background: #FAF6EF;
   --foreground: #2B2622;
-  --yarn-coral: var(--accent-terracotta);
-  --yarn-sage: var(--accent-sage);
-  --yarn-beige: var(--surface-alt);
-  --yarn-cream: var(--background);
   --yarn-ink: var(--ink);
 }
 
@@ -33,10 +27,6 @@
   --color-surface-alt: var(--surface-alt);
   --color-border-custom: var(--border);
   --color-hover-fill: var(--hover-fill);
-  --color-yarn-coral: var(--yarn-coral);
-  --color-yarn-sage: var(--yarn-sage);
-  --color-yarn-beige: var(--yarn-beige);
-  --color-yarn-cream: var(--yarn-cream);
   --color-yarn-ink: var(--yarn-ink);
 
   --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
@@ -54,6 +44,11 @@
 html {
   scroll-behavior: smooth;
   background-color: var(--background);
+}
+
+/* Anchor targets stop below the fixed navbar */
+[id] {
+  scroll-margin-top: 96px;
 }
 
 body {
@@ -129,10 +124,6 @@ body {
     inset 0 1px 2px rgba(255, 255, 255, 0.3), 
     inset 0 -1px 2px rgba(0, 0, 0, 0.2);
   height: 100%;
-}
-
-.transition-spring {
-  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .transition-fluid {

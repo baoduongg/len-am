@@ -9,7 +9,6 @@ import { formatPrice } from "@/utils/format";
 import ConfirmModal from "@/components/ConfirmModal";
 import Drawer from "@/components/ui/Drawer";
 import EmptyState from "@/components/ui/EmptyState";
-import { handleHashClick, handleLogoClick } from "@/utils/navigation";
 import { NAV_LINKS } from "@/lib/constants";
 
 function CartIcon({ className, strokeWidth = 1.5 }: { className: string; strokeWidth?: number }) {
@@ -57,7 +56,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="flex items-center justify-between">
             
-            <Link href="/" onClick={handleLogoClick} className="flex items-center space-x-2 group">
+            <Link href="/" className="flex items-center space-x-2 group">
               <span className="text-2xl font-serif font-bold text-accent transition-transform duration-300 group-hover:scale-102">
                 Len Ấm
               </span>
@@ -69,7 +68,6 @@ export default function Navbar() {
                 <Link
                   key={link.label}
                   href={link.href}
-                  onClick={link.hash ? (e) => handleHashClick(e, link.hash!) : undefined}
                   className="text-xs font-semibold text-ink-muted hover:text-accent uppercase tracking-wider transition-colors duration-200"
                 >
                   {link.label}
@@ -156,10 +154,7 @@ export default function Navbar() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    onClick={(e) => {
-                      setIsOpen(false);
-                      if (link.hash) handleHashClick(e, link.hash);
-                    }}
+                    onClick={() => setIsOpen(false)}
                     className="text-xs font-semibold text-ink-muted hover:text-accent uppercase tracking-wider py-2"
                   >
                     {link.label}
@@ -327,10 +322,7 @@ export default function Navbar() {
               >
                 <Link
                   href="/#workshop"
-                  onClick={(e) => {
-                    setIsCartOpen(false);
-                    handleHashClick(e, "workshop");
-                  }}
+                  onClick={() => setIsCartOpen(false)}
                   className="mt-4 px-4 py-2 bg-accent-sage text-surface text-xs font-semibold rounded-btn"
                 >
                   Xem lịch học
@@ -347,11 +339,12 @@ export default function Navbar() {
                     <span className="text-xs font-bold leading-tight">am</span>
                   </div>
 
-                  <div className="flex-grow min-w-0">
+                   <div className="flex-grow min-w-0">
                     <h4 className="font-serif text-sm font-bold text-ink leading-tight">
-                      {reg.session}
+                      {reg.workshopTitle || "Lớp học Đan len"}
                     </h4>
                     <div className="text-[10px] text-ink-muted mt-2 space-y-0.5">
+                      <p>Buổi học: <span className="font-semibold text-accent">{reg.session}</span></p>
                       <p>Học viên: <span className="font-medium text-ink">{reg.name}</span></p>
                       <p>SĐT liên hệ: <span className="font-medium text-ink">{reg.phone}</span></p>
                       <p className="text-[9px] opacity-75 mt-1">Đăng ký vào: {new Date(reg.registeredAt).toLocaleDateString("vi-VN")}</p>
@@ -361,7 +354,7 @@ export default function Navbar() {
                   <button
                     onClick={() => {
                       setSelectedCancelIndex(index);
-                      setSelectedCancelTitle(reg.session);
+                      setSelectedCancelTitle(reg.workshopTitle || "Lớp học Đan len");
                       setConfirmCancelOpen(true);
                     }}
                     className="text-xs text-ink-muted hover:text-red-500 p-1 hover:bg-red-50 rounded-full transition-colors flex-shrink-0"

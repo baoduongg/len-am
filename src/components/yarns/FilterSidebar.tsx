@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useStore } from "@/store/useStore";
+import { DEFAULT_PRICE_RANGE, useStore } from "@/store/useStore";
 import { formatPrice } from "@/utils/format";
 
 const FIBER_OPTIONS = ["Merino", "Alpaca", "Silk", "Cotton", "Linen"];
@@ -16,8 +16,6 @@ const QUICK_PRICE_RANGES: [number, number][] = [
   [100000, 300000],
   [300000, 600000],
 ];
-
-export const DEFAULT_PRICE_RANGE: [number, number] = [100000, 600000];
 
 export function countActiveFilters(filters: {
   fibers: string[];

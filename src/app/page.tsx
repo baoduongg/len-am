@@ -1,15 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import ProductCard from "@/components/ProductCard";
-import WorkshopModal from "@/components/WorkshopModal";
+import WorkshopDetailModal, { WORKSHOP_DETAILS } from "@/components/WorkshopDetailModal";
 import CtaButton from "@/components/ui/CtaButton";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { useStore } from "@/store/useStore";
-import { handleHashClick, scrollToSection } from "@/utils/navigation";
 
 const fadeUpVariants = {
   hidden: { y: 40, opacity: 0 },
@@ -34,31 +33,7 @@ const containerVariants = {
   }
 };
 
-const VALUE_PROPS = [
-  {
-    title: "Nguồn gốc minh bạch",
-    text: "Từng lô sợi đều có mã định danh trang trại, cam kết quy trình chăn nuôi nhân đạo và thu hoạch nhân văn từ các đồng cỏ tự nhiên.",
-    iconClass: "bg-accent/5 border-accent/20 text-accent",
-    offset: false,
-    iconPath:
-      "M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-.778.099-1.533.284-2.253"
-  },
-  {
-    title: "Màu sắc thảo mộc",
-    text: "Nhuộm thủ công từ vỏ quả óc chó, củ nghệ và chàm tự nhiên. Đảm bảo dải màu sắc mộc mạc và hoàn toàn không hóa chất gây kích ứng.",
-    iconClass: "bg-accent-sage/5 border-accent-sage/20 text-accent-sage",
-    offset: true,
-    iconPath: "M12 3v18M3 12h18M12 3a9 9 0 1 1 0 18A9 9 0 0 1 12 3Z"
-  },
-  {
-    title: "Chế tác chậm rãi",
-    text: "Các xưởng kéo sợi gia đình gìn giữ nghề kéo sợi chậm qua nhiều thế hệ, giữ nguyên độ xốp phồng tự nhiên của xơ lông thú.",
-    iconClass: "bg-accent/5 border-accent/20 text-accent",
-    offset: false,
-    iconPath:
-      "M9.813 15.904L9 21m0 0l-.813-5.096m.813 5.096h6.75M9.813 15.904a8.25 8.25 0 0113.128-6.09m-13.128 6.09a9.022 9.022 0 01-5.626-4.938m0 0L3 11m.248-1.127A8.25 8.25 0 0118.067 4.19M3.248 9.873a9.023 9.023 0 005.626 4.939m0 0l-.813-5.096H3.248"
-  }
-];
+const PAST_WORKSHOPS = Object.values(WORKSHOP_DETAILS);
 
 const CREATIONS = [
   {
@@ -118,19 +93,10 @@ function ViewAllLink({ href, label }: { href: string; label: string }) {
 export default function Home() {
   const products = useStore((state) => state.products);
   const featuredProducts = products.filter((p) => p.featured);
-  const [isWorkshopOpen, setIsWorkshopOpen] = useState(false);
+  const [selectedWorkshopId, setSelectedWorkshopId] = useState<string | null>(null);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterSuccess, setNewsletterSuccess] = useState(false);
   const addToast = useStore((state) => state.addToast);
-
-  // Cuộn tới section khi mở trang chủ kèm hash (vd: /#workshop)
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hash) {
-      const hash = window.location.hash.substring(1);
-      const timer = setTimeout(() => scrollToSection(hash, "auto"), 150);
-      return () => clearTimeout(timer);
-    }
-  }, []);
 
   return (
     <main className="flex-grow">
@@ -165,7 +131,6 @@ export default function Home() {
 
                 <Link
                   href="/#workshop"
-                  onClick={(e) => handleHashClick(e, "workshop")}
                   className="h-12 px-6 rounded-btn border border-border-custom hover:bg-hover-fill text-ink font-semibold text-xs active:scale-[0.98] transition-all duration-300 flex items-center justify-center"
                 >
                   Lịch học Workshop
@@ -231,25 +196,36 @@ export default function Home() {
 
       <section id="story" className="py-28 md:py-36 bg-surface-alt/65 border-b border-border-custom/70">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
 
 
-            <div className="lg:col-span-5 space-y-6">
+            <div className="lg:col-span-5 space-y-8 lg:sticky lg:top-32">
               <SectionHeading
-                eyebrow="Giá trị cốt lõi"
+                eyebrow="Về chúng mình"
                 title={
                   <>
-                    Mỗi cuộn len <br />
-                    <span className="italic font-light text-accent">là một câu chuyện</span>
+                    Không gian dệt nên <br />
+                    <span className="italic font-light text-accent">những ấm áp mộc mạc</span>
                   </>
                 }
               />
               <p className="text-xs text-ink-muted leading-relaxed font-normal max-w-sm">
-                Chúng mình tỉ mẩn trong từng khâu lựa chọn, để mỗi sợi len mang lại cảm hứng sáng tạo vô tận và sự trọn vẹn cho bạn.
+                Nép mình bên con phố nhỏ tĩnh lặng tại Sài Gòn, Len Ấm không chỉ là một cửa hiệu len sợi, mà là chốn dừng chân bình yên cho những ai yêu mến thủ công. Từng chiếc kệ gỗ mộc đầy len, góc trà thảo mộc tự phục vụ luôn sẵn sàng để bạn ghé chơi và tìm lại nhịp điệu chậm rãi của cuộc sống.
               </p>
 
-              <div className="border-l-2 border-accent/40 pl-4 py-1 italic text-xs text-ink-muted leading-relaxed max-w-sm">
-                “Chúng mình tin rằng mỗi mũi đan là một khoảnh khắc kết nối giữa đôi tay và tâm hồn. Không vội vã, không tự động hóa.”
+              <div className="grid grid-cols-3 gap-6 pt-6 border-t border-border-custom/50 max-w-sm">
+                <div className="space-y-1">
+                  <span className="font-serif text-2xl font-bold text-accent block">2019</span>
+                  <span className="text-[10px] text-ink-muted uppercase tracking-wider block">Thành lập</span>
+                </div>
+                <div className="space-y-1">
+                  <span className="font-serif text-2xl font-bold text-accent block">150+</span>
+                  <span className="text-[10px] text-ink-muted uppercase tracking-wider block">Workshop</span>
+                </div>
+                <div className="space-y-1">
+                  <span className="font-serif text-2xl font-bold text-accent block">100%</span>
+                  <span className="text-[10px] text-ink-muted uppercase tracking-wider block">Sợi tự nhiên</span>
+                </div>
               </div>
             </div>
 
@@ -261,21 +237,51 @@ export default function Home() {
               whileInView="show"
               viewport={{ once: true, margin: "-100px" }}
             >
-              {VALUE_PROPS.map((prop) => (
+              <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-ink-muted mb-2 block lg:hidden">
+                Các buổi Workshop đã diễn ra
+              </div>
+
+              {PAST_WORKSHOPS.map((workshop) => (
                 <motion.div
-                  key={prop.title}
+                  key={workshop.id}
                   variants={fadeUpVariants}
-                  className={`double-bezel-outer shadow-warm-sm hover:shadow-warm-md max-w-2xl ${prop.offset ? "lg:translate-x-6" : ""}`}
+                  onClick={() => setSelectedWorkshopId(workshop.id)}
+                  className="double-bezel-outer shadow-warm-sm hover:shadow-warm-md w-full cursor-pointer group"
                 >
-                  <div className="double-bezel-inner p-6 flex gap-5 items-start">
-                    <div className={`w-10 h-10 rounded-full border flex items-center justify-center flex-shrink-0 ${prop.iconClass}`}>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d={prop.iconPath} />
-                      </svg>
+                  <div className="double-bezel-inner p-5 sm:p-6 flex flex-col sm:flex-row gap-6 items-center">
+                    {/* Image container */}
+                    <div className="relative w-full sm:w-2/5 aspect-[16/10] rounded-inner overflow-hidden flex-shrink-0">
+                      <motion.div
+                        layoutId={`workshop-image-wrap-${workshop.id}`}
+                        className="relative w-full h-full"
+                        transition={{ type: "spring", stiffness: 180, damping: 24 }}
+                      >
+                        <Image
+                          src={workshop.image}
+                          alt={workshop.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 30vw"
+                          className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                        />
+                      </motion.div>
                     </div>
-                    <div className="space-y-1">
-                      <h3 className="font-serif text-sm font-bold text-ink">{prop.title}</h3>
-                      <p className="text-xs text-ink-muted leading-relaxed font-normal">{prop.text}</p>
+                    {/* Content container */}
+                    <div className="flex-grow space-y-3 w-full">
+                      <div className="flex items-start justify-between gap-3 flex-col">
+                        <h3 className="font-serif text-sm font-bold text-ink leading-tight">
+                          {workshop.title}
+                        </h3>
+                        <span className="text-[9px] uppercase tracking-wider font-semibold text-accent px-2 py-0.5 rounded-full border border-accent/20 bg-accent/5">
+                          {workshop.tag}
+                        </span>
+                      </div>
+                      <p className="text-xs text-ink-muted leading-relaxed font-normal">
+                        {workshop.description}
+                      </p>
+                      <div className="text-[10px] font-semibold text-accent flex items-center gap-1 pt-1 transition-all duration-300 group-hover:translate-x-1">
+                        <span>Xem chi tiết lớp học</span>
+                        <span>→</span>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -444,7 +450,7 @@ export default function Home() {
                 Gác lại những bộn bề công việc, tìm về sự tĩnh lặng qua từng đường kim mũi chỉ. Workshop của chúng mình hướng dẫn từ cơ bản đến nâng cao tại không gian ấm cúng tại Sài Gòn, phục vụ sẵn trà thảo mộc thơm lành.
               </p>
               <div className="pt-2">
-                <CtaButton color="sage" icon="plus" onClick={() => setIsWorkshopOpen(true)}>
+                <CtaButton color="sage" icon="plus" onClick={() => setSelectedWorkshopId("basics")}>
                   Đặt chỗ ngay
                 </CtaButton>
               </div>
@@ -453,7 +459,11 @@ export default function Home() {
         </div>
       </section>
 
-      <WorkshopModal isOpen={isWorkshopOpen} onClose={() => setIsWorkshopOpen(false)} />
+      <WorkshopDetailModal
+        isOpen={selectedWorkshopId !== null}
+        onClose={() => setSelectedWorkshopId(null)}
+        workshopId={selectedWorkshopId}
+      />
     </main>
   );
 }

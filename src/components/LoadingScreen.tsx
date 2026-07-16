@@ -7,38 +7,11 @@ export default function LoadingScreen() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let fontLoaded = false;
-    let timeoutDone = false;
-
-    const checkLoadingState = () => {
-      if (fontLoaded && timeoutDone) {
-        setIsLoading(false);
-      }
-    };
-
-    
-    if (typeof window !== "undefined" && document.fonts) {
-      document.fonts.ready
-        .then(() => {
-          fontLoaded = true;
-          checkLoadingState();
-        })
-        .catch((err) => {
-          console.error("Font loading detection failed, bypassing loader", err);
-          fontLoaded = true;
-          checkLoadingState();
-        });
-    } else {
-      fontLoaded = true;
-    }
-
-    
-    const timer = setTimeout(() => {
-      timeoutDone = true;
-      checkLoadingState();
-    }, 1200);
-
-    return () => clearTimeout(timer);
+    // Hide once fonts are ready, but never before the 1.2s brand beat.
+    Promise.all([
+      document.fonts?.ready.catch(() => {}),
+      new Promise((resolve) => setTimeout(resolve, 1200)),
+    ]).then(() => setIsLoading(false));
   }, []);
 
   return (

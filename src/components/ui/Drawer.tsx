@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "motion/react";
+import { useBodyScrollLock } from "@/utils/useBodyScrollLock";
 
 interface DrawerProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ export default function Drawer({
   widthClassName = "max-w-md",
   children,
 }: DrawerProps) {
+  useBodyScrollLock(isOpen);
   return (
     <AnimatePresence>
       {isOpen && (

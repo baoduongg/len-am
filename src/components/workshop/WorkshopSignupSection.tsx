@@ -47,7 +47,7 @@ export default function WorkshopSignupSection() {
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 900));
 
-    registerWorkshop({ name: name.trim(), phone: cleanPhone, session });
+    registerWorkshop({ name: name.trim(), phone: cleanPhone, session, workshopTitle: "Workshop Đan len cuối tuần" });
     addToast(`Đăng ký thành công lớp đan ${session}`, "success");
     setIsSubmitting(false);
     setIsSuccess(true);
