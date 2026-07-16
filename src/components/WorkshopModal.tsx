@@ -176,7 +176,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Ví dụ: Khánh An"
-                        className="w-full px-4 py-3 rounded-btn bg-background border border-border-custom text-ink placeholder-ink-muted/40 text-xs focus:outline-none focus:border-accent transition-colors duration-200 disabled:opacity-50"
+                        className="w-full px-4 py-3 rounded-btn bg-background border border-border-custom text-ink placeholder-ink-muted/40 text-base focus:outline-none focus:border-accent transition-colors duration-200 disabled:opacity-50"
                       />
                     </div>
 
@@ -196,7 +196,7 @@ export default function WorkshopModal({ isOpen, onClose }: WorkshopModalProps) {
                           if (phoneError) setPhoneError("");
                         }}
                         placeholder="Ví dụ: 0912345678"
-                        className={`w-full px-4 py-3 rounded-btn bg-background border ${phoneError ? "border-red-400 focus:border-red-400" : "border-border-custom focus:border-accent"} text-ink placeholder-ink-muted/40 text-xs focus:outline-none transition-colors duration-200 disabled:opacity-50`}
+                        className={`w-full px-4 py-3 rounded-btn bg-background border ${phoneError ? "border-red-400 focus:border-red-400" : "border-border-custom focus:border-accent"} text-ink placeholder-ink-muted/40 text-base focus:outline-none transition-colors duration-200 disabled:opacity-50`}
                       />
                       {phoneError && (
                         <p className="text-[10px] text-red-500 font-medium pl-0.5 animate-fadeIn">
