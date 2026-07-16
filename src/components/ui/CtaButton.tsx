@@ -34,6 +34,8 @@ interface CtaButtonProps {
   icon?: keyof typeof ICONS;
   className?: string;
   children: React.ReactNode;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 export default function CtaButton({
@@ -43,8 +45,10 @@ export default function CtaButton({
   icon = "arrow",
   className = "",
   children,
+  type = "button",
+  disabled = false,
 }: CtaButtonProps) {
-  const classes = `pl-6 pr-2.5 h-12 rounded-btn text-surface flex items-center gap-4 font-semibold text-xs active:scale-[0.98] group transition-all duration-300 ${
+  const classes = `pl-6 pr-2.5 h-12 rounded-btn text-surface flex items-center gap-4 font-semibold text-xs active:scale-[0.98] group transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none ${
     color === "accent"
       ? "bg-accent shadow-warm-md hover:bg-accent-dark"
       : "bg-accent-sage shadow-warm-sm hover:opacity-90"
@@ -65,7 +69,7 @@ export default function CtaButton({
     );
   }
   return (
-    <button onClick={onClick} className={classes}>
+    <button onClick={onClick} type={type} disabled={disabled} className={classes}>
       {content}
     </button>
   );

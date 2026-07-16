@@ -244,11 +244,21 @@ world, soft warm light. No text, no people.
 - [x] Phase 0 — setup, Design Read, shadcn, token, font, tooling
 - [x] 5 still — generate, import, duyệt cohesion
 - [x] 5 dive — generate, import, extract frame biên
-- [ ] 4 connector — user generate trên Flow theo bảng mục 6
-- [ ] Encode: crf 20, GOP nhỏ (`-g 8`), strip audio, faststart; bản mobile 720p `-g 4`;
-      extract poster từ clip đã encode; cân nhắc crop đồng loạt để cắt watermark "Veo"
-- [ ] SSIM seam-check tự động (≥0.90 pass) — script trong skill `references/pipeline.md`
-- [ ] Phase 2 — `src/app/workshop/page.tsx`, `src/components/workshop/ScrollWorld.tsx`
-      (Motion `useScroll`, blob-URL, crossfade seam, device-tier, reduced-motion),
-      `src/components/workshop/WorkshopSignupSection.tsx` (form client-only, không API)
-- [ ] Phase 3 — responsive 375px/1440px, a11y form, audit anti-slop trước khi báo xong
+- [ ] 4 connector — user generate trên Flow theo bảng mục 6 (chưa có; scene ghép trực
+      tiếp dive→dive bằng crossfade null-slot trong `ScrollWorld`, sẽ thay bằng connector
+      thật khi có)
+- [x] Encode 5 dive: crf 20, `-g 8`, strip audio, faststart (`public/workshop/vid/scene-N.mp4`,
+      nguồn gốc đã là 720p nên không cần bản mobile riêng — crop-safe qua `object-cover`)
+- [x] Extract poster từ clip đã encode (`public/workshop/posters/scene-N-poster.jpg`)
+- [ ] SSIM seam-check tự động — chưa chạy được vì thiếu connector; sẽ chạy sau khi có
+      đủ 4 connector (script trong skill `references/pipeline.md` §5c)
+- [x] Phase 2 — `src/app/workshop/page.tsx` (server, metadata) + `WorkshopClient.tsx`
+      (hero + lắp `ScrollWorld`), `src/components/workshop/ScrollWorld.tsx` (Motion
+      `useScroll` + `position: sticky`, currentTime scrub theo scroll, crossfade seam,
+      `prefers-reduced-motion` fallback dạng stack tĩnh, iOS priming, SEO copy mirror
+      `sr-only`), `src/components/workshop/WorkshopSignupSection.tsx` (form client-only,
+      tái dùng validation + Zustand store của `WorkshopModal`, không API) — build pass,
+      smoke-test qua Chrome DevTools: scroll qua cả 5 scene, crossfade mượt, submit form
+      thành công (toast + badge giỏ hàng), mobile 390px crop-safe ổn
+- [ ] Phase 3 — audit anti-slop, kiểm tra kỹ 375px thật + a11y (contrast rail dots, focus
+      states của form) trước khi báo xong
