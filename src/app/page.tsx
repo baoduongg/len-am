@@ -134,12 +134,12 @@ export default function Home() {
 
   return (
     <main className="flex-grow">
-      
+
       <section className="relative min-h-[90dvh] pt-32 pb-24 md:pt-48 md:pb-36 flex items-center bg-transparent">
         <div className="max-w-7xl mx-auto px-6 md:px-8 w-full relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
-            
+
             <motion.div
               className="lg:col-span-7 space-y-6 flex flex-col items-start"
               initial={{ opacity: 0, y: 30 }}
@@ -159,7 +159,7 @@ export default function Home() {
                 Tuyển chọn những dòng len lông cừu Merino, tơ Alpaca tơ hảo hạng nhập khẩu nguyên cuộn. Đồng hành cùng bạn kiến tạo những sản phẩm thủ công tinh xảo, bền vững cùng thời gian.
               </p>
 
-              
+
               <div className="flex flex-wrap items-center gap-4 pt-4 w-full sm:w-auto">
                 <CtaButton href="/yarns">Khám phá sợi len</CtaButton>
 
@@ -173,13 +173,13 @@ export default function Home() {
               </div>
             </motion.div>
 
-            
+
             <div className="lg:col-span-5 relative flex justify-center lg:justify-end py-10">
-              
+
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-accent-sage/10 rounded-full blur-3xl pointer-events-none" />
 
               <div className="relative w-full max-w-[380px] h-[400px]">
-                
+
                 <motion.div
                   className="absolute left-0 top-0 w-64 h-80 double-bezel-outer shadow-warm-md cursor-pointer"
                   initial={{ opacity: 0, scale: 0.9, rotate: -8 }}
@@ -200,7 +200,7 @@ export default function Home() {
                   </div>
                 </motion.div>
 
-                
+
                 <motion.div
                   className="absolute right-0 bottom-0 w-56 h-72 double-bezel-outer shadow-warm-lg cursor-pointer"
                   initial={{ opacity: 0, scale: 0.9, rotate: 8 }}
@@ -228,12 +228,12 @@ export default function Home() {
 
       <SectionDivider />
 
-      
+
       <section id="story" className="py-28 md:py-36 bg-surface-alt/65 border-b border-border-custom/70">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
-            
+
             <div className="lg:col-span-5 space-y-6">
               <SectionHeading
                 eyebrow="Giá trị cốt lõi"
@@ -253,7 +253,7 @@ export default function Home() {
               </div>
             </div>
 
-            
+
             <motion.div
               className="lg:col-span-7 space-y-6 flex flex-col items-stretch"
               variants={containerVariants}
@@ -286,7 +286,7 @@ export default function Home() {
         </div>
       </section>
 
-      
+
       <section className="py-28 md:py-36">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
@@ -294,7 +294,7 @@ export default function Home() {
             <ViewAllLink href="/yarns" label="Xem chất liệu len sợi" />
           </div>
 
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[440px]">
             {CREATIONS.map((creation) => (
               <div key={creation.title} className={`${creation.span} group double-bezel-outer shadow-warm-md hover:shadow-warm-lg`}>
@@ -325,7 +325,7 @@ export default function Home() {
 
       <SectionDivider />
 
-      
+
       <section className="py-28 md:py-36 bg-surface-alt/65 border-b border-border-custom/70">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
@@ -343,7 +343,7 @@ export default function Home() {
         </div>
       </section>
 
-      
+
       <section className="py-28 md:py-36">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="double-bezel-outer max-w-3xl mx-auto shadow-warm-lg">
@@ -359,7 +359,7 @@ export default function Home() {
                 Đăng ký để nhận thông tin về các dòng len tuyển chọn mới về hàng, bài viết chia sẻ kỹ thuật đan tay nâng cao và mã giảm giá 10% cho đơn hàng đầu tiên.
               </p>
 
-              
+
               <div className="w-full max-w-md pt-2 flex flex-col items-center">
                 <AnimatePresence mode="wait">
                   {!newsletterSuccess ? (
@@ -418,7 +418,7 @@ export default function Home() {
 
       <SectionDivider />
 
-      
+
       <section id="workshop" className="py-28 md:py-36 bg-surface-alt/35">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
