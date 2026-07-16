@@ -1,8 +1,10 @@
-# WORKSHOP.md — Nhật ký dự án Landing Page `/workshop`
+# WORKSHOP.md — Nhật ký dự án Landing Page `/scroll-word`
 
 Trang landing "camera bay xuyên các khu vực trong shop khi scroll", kết thúc bằng form
 đăng ký workshop đan len. Chỉ frontend — không lưu trữ form, không giá/thanh toán.
-Bắt đầu: 15/07/2026.
+Bắt đầu: 15/07/2026. Route thật là `/scroll-word` (không phải `/workshop`) —
+`src/app/scroll-word/page.tsx` + `WorkshopClient.tsx`; asset path (`public/workshop/`)
+và tên component (`ScrollWorld`, `WorkshopSignupSection`) vẫn giữ tiền tố `workshop`.
 
 ---
 
@@ -247,18 +249,32 @@ world, soft warm light. No text, no people.
 - [ ] 4 connector — user generate trên Flow theo bảng mục 6 (chưa có; scene ghép trực
       tiếp dive→dive bằng crossfade null-slot trong `ScrollWorld`, sẽ thay bằng connector
       thật khi có)
-- [x] Encode 5 dive: crf 20, `-g 8`, strip audio, faststart (`public/workshop/vid/scene-N.mp4`,
-      nguồn gốc đã là 720p nên không cần bản mobile riêng — crop-safe qua `object-cover`)
-- [x] Extract poster từ clip đã encode (`public/workshop/posters/scene-N-poster.jpg`)
+- [x] Encode 5 dive: crf 20, `-g 8`, strip audio, faststart (`public/workshop/vid/scene-N.mp4`)
+      — **đã đổi ý so với ghi chú cũ**: có thêm bản mobile riêng `scene-N-m.mp4` +
+      poster `scene-N-poster-m.jpg` (dùng khi `matchMedia("(max-width: 600px)")`), vì
+      bản gốc 720p vẫn nặng hơn cần thiết trên mobile data
+- [x] Extract poster từ clip đã encode (`public/workshop/posters/scene-N-poster.jpg` +
+      `-poster-m.jpg`)
 - [ ] SSIM seam-check tự động — chưa chạy được vì thiếu connector; sẽ chạy sau khi có
       đủ 4 connector (script trong skill `references/pipeline.md` §5c)
-- [x] Phase 2 — `src/app/workshop/page.tsx` (server, metadata) + `WorkshopClient.tsx`
+- [x] Phase 2 — `src/app/scroll-word/page.tsx` (server, metadata) + `WorkshopClient.tsx`
       (hero + lắp `ScrollWorld`), `src/components/workshop/ScrollWorld.tsx` (Motion
       `useScroll` + `position: sticky`, currentTime scrub theo scroll, crossfade seam,
-      `prefers-reduced-motion` fallback dạng stack tĩnh, iOS priming, SEO copy mirror
-      `sr-only`), `src/components/workshop/WorkshopSignupSection.tsx` (form client-only,
-      tái dùng validation + Zustand store của `WorkshopModal`, không API) — build pass,
+      `prefers-reduced-motion` fallback dạng stack tĩnh, iOS priming, rail nav bên phải
+      để nhảy thẳng tới scene, SEO copy mirror `sr-only`),
+      `src/components/workshop/WorkshopSignupSection.tsx` (form client-only, tái dùng
+      validation + Zustand store của `WorkshopModal`, không API) — build pass,
       smoke-test qua Chrome DevTools: scroll qua cả 5 scene, crossfade mượt, submit form
       thành công (toast + badge giỏ hàng), mobile 390px crop-safe ổn
-- [ ] Phase 3 — audit anti-slop, kiểm tra kỹ 375px thật + a11y (contrast rail dots, focus
-      states của form) trước khi báo xong
+- [x] Fix `WorkshopModal.tsx` input `text-xs` → `text-base` (< 16px làm Safari iOS tự
+      zoom khi focus input)
+- [x] Phase 3 (a11y) — `WorkshopSignupSection` dropdown "Chọn buổi học" ban đầu tự chế
+      (`<ul role="listbox">` + `<li onClick>`, không bàn phím thao tác được, `<select>`
+      thật bị giấu `tabIndex={-1}`) → thay bằng đúng pattern `<select>` +
+      `appearance-none` mà `WorkshopModal.tsx` đã dùng cho cùng field này — native, gõ
+      bàn phím/đọc màn hình dùng được ngay, ít code hơn (xoá `isOpen` state,
+      `dropdownRef`, click-outside effect). Verify: build pass, DevTools a11y-tree lộ
+      đúng `combobox` + `option`, điền form + submit ở 375px chạy trọn luồng.
+- [ ] Phase 3 (còn lại) — audit anti-slop, kiểm tra tương phản rail dots (số + line khi
+      không active, `text-surface/40` / `bg-surface/30` đè lên video) trên thiết bị thật
+      trước khi báo xong

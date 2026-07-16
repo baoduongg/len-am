@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useStore } from "@/store/useStore";
 import CtaButton from "@/components/ui/CtaButton";
@@ -24,19 +24,6 @@ export default function WorkshopSignupSection() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [nameError, setNameError] = useState("");
   const [phoneError, setPhoneError] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -187,80 +174,27 @@ export default function WorkshopSignupSection() {
                 {phoneError && <p className="text-[10px] text-red-500 font-medium">{phoneError}</p>}
               </div>
 
-              <div className="space-y-1.5" ref={dropdownRef}>
-                <label className="text-[10px] font-bold text-ink uppercase tracking-wider block">
+              <div className="space-y-1.5">
+                <label htmlFor="sw-session" className="text-[10px] font-bold text-ink uppercase tracking-wider">
                   Chọn buổi học
                 </label>
-                
-                {/* Hidden select for accessibility/form validation fallback */}
-                <select
-                  id="sw-session"
-                  name="session"
-                  value={session}
-                  onChange={(e) => setSession(e.target.value)}
-                  className="sr-only"
-                  tabIndex={-1}
-                >
-                  {SESSIONS.map((s) => (
-                    <option key={s} value={s}>{s}</option>
-                  ))}
-                </select>
-
                 <div className="relative">
-                  <button
-                    type="button"
+                  <select
+                    id="sw-session"
                     disabled={isSubmitting}
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="w-full px-4 py-2.5 rounded-btn bg-background border border-border-custom text-ink text-xs focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 transition-all duration-300 flex items-center justify-between cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
-                    aria-haspopup="listbox"
-                    aria-expanded={isOpen}
+                    value={session}
+                    onChange={(e) => setSession(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-btn bg-background border border-border-custom text-ink text-xs focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 appearance-none transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <span>{session}</span>
-                    <svg
-                      className={`w-3.5 h-3.5 text-ink-muted transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2.5}
-                    >
+                    {SESSIONS.map((s) => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
+                  <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-ink-muted">
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                     </svg>
-                  </button>
-
-                  <AnimatePresence>
-                    {isOpen && (
-                      <motion.ul
-                        initial={{ opacity: 0, y: -8, scale: 0.96 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -8, scale: 0.96 }}
-                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="absolute z-30 w-full mt-1.5 bg-surface border border-border-custom rounded-btn shadow-warm-md overflow-hidden py-1 max-h-60 overflow-y-auto"
-                        role="listbox"
-                      >
-                        {SESSIONS.map((s) => {
-                          const isSelected = s === session;
-                          return (
-                            <li
-                              key={s}
-                              role="option"
-                              aria-selected={isSelected}
-                              onClick={() => {
-                                setSession(s);
-                                setIsOpen(false);
-                              }}
-                              className={`px-4 py-2 text-xs cursor-pointer transition-colors duration-150 ${
-                                isSelected
-                                  ? "bg-accent/10 text-accent font-semibold"
-                                  : "text-ink hover:bg-hover-fill"
-                              }`}
-                            >
-                              {s}
-                            </li>
-                          );
-                        })}
-                      </motion.ul>
-                    )}
-                  </AnimatePresence>
+                  </div>
                 </div>
               </div>
 
